@@ -1400,3 +1400,50 @@ button, input, select, textarea {
   border-color: var(--primary-color);
   color: var(--primary-color);
 }
+
+/* ============================================================
+   RESPONSIVE DESIGN ADAPTATIONS (MOBILE & TABLET)
+============================================================ */
+@media (max-width: 850px) {
+  .header {
+    height: auto;
+    padding: 12px 0;
+  }
+  .header-container {
+    flex-wrap: wrap;
+    height: auto;
+    gap: 12px;
+    justify-content: space-between;
+  }
+  .search-wrapper {
+    order: 3;
+    max-width: 100%;
+    width: 100%;
+  }
+  .logo-sub {
+    display: none; /* Hide subtitle on mobile to save space */
+  }
+}
+@media (max-width: 480px) {
+  .header-actions {
+    width: auto;
+    gap: 6px;
+  }
+  .lang-btn {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+  .role-badge {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+  .action-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  .hero-title {
+    font-size: 2.2rem;
+  }
+}
+
