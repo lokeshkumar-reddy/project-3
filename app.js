@@ -1,0 +1,1301 @@
+/* ============================================================
+   BILINGUAL TRANSLATION DICTIONARY (English & Telugu)
+============================================================ */
+const TRANSLATIONS = {
+  en: {
+    logoSub: "Pesticides, Fertilisers & Seeds",
+    searchPlaceholder: "Search crops care products...",
+    roleUser: "👤 User Mode",
+    roleAdmin: "🛠️ Admin Mode",
+    heroTag: "✨ Quality Crops Care since 2012",
+    heroTitle: "Grow Richer Yields<br><span class='gradient-text'>With HKGN Products</span>",
+    heroDesc: "We supply high-standard chemical pesticides, organic fertilisers, and hybrid high-yielding seeds. Authorized dealer for top agricultural brands.",
+    heroBtnText: "🛒 Shop Catalog",
+    heroChip1: "🚜 100% Genuine",
+    heroChip2: "💧 Organic Options",
+    heroChip3: "📞 Expert Guidance",
+    filterTitle: "Categories",
+    filterResetBtn: "Reset All",
+    catAll: "All Products",
+    catFertilisers: "Fertilisers",
+    catPesticides: "Pesticides",
+    catSeeds: "Seeds",
+    infoCardTitle: "HKGN Agencies",
+    infoCardProp: "Proprietor: Siddiq Basha",
+    infoCardAddress: "📍 R.T.C Busstand Road, Punganur",
+    infoCardCell: "📞 Cell: 90004 76878, 90598 47718",
+    infoCardGST: "GSTIN: 37DTOPS6450N1ZN",
+    productCountText: "Showing {count} products",
+    sortLabel: "Sort By:",
+    optSortName: "Alphabetical",
+    optSortPriceLow: "Price: Low to High",
+    optSortPriceHigh: "Price: High to Low",
+    emptyTitle: "No products found",
+    emptyDesc: "Try typing a different name or matching category filters.",
+    emptyBtn: "Clear Filters",
+    inStock: "Available: {stock} units",
+    outStock: "Out of Stock",
+    onlyLeft: "Only {stock} left!",
+    addToBag: "Add to Bag 🛍️",
+    bagDrawerTitle: "Shopping Bag",
+    bagSubtotal: "Subtotal",
+    bagTotal: "Total",
+    btnProceedCheckout: "🔒 Proceed to Checkout",
+    emptyCartText: "Your shopping bag is empty",
+    btnStartShopping: "Start Shopping",
+    chkTitleStep1: "1",
+    chkHeadingCust: "Customer Information",
+    lblCustName: "Full Name / Booking Person Name",
+    lblCustMobile: "Mobile Number",
+    lblCustAddress: "Delivery Address",
+    custNamePlaceholder: "Enter booking person name",
+    custMobilePlaceholder: "Enter 10-digit mobile number",
+    custAddressPlaceholder: "Enter full delivery address",
+    chkTitleStep2: "2",
+    chkHeadingPay: "Choose Payment Mode",
+    payLabelCod: "Cash on Delivery",
+    payDetailsTitle: "UPI Application Finalization",
+    payDetailsDesc: "Securely checkout using digital UPI. The total bill amount is automatically fetched and locked. You do not need to enter or edit the amount.",
+    lblAmountLock: "Locked Payment Amount (Non-editable)",
+    orderSummaryTitle: "Order Summary",
+    sumSubtotal: "Subtotal",
+    sumTotal: "Total Amount",
+    btnPlaceOrder: "💬 Place Order on WhatsApp",
+    btnBackToShop: "🏪 Back to Shop",
+    adminPanelHeading: "🛠️ Store Control Center",
+    adminPanelSubheading: "Manage HKGN product listings, update stocks daily, and restore items.",
+    adminBtnAddNew: "+ Add New Product",
+    tabCatalog: "Active Catalog",
+    tabRecycle: "Deleted Products Bin",
+    thImage: "Image",
+    thName: "Product Name",
+    thCategory: "Category",
+    thPrice: "Price",
+    thStock: "Stock Level",
+    thActions: "Actions",
+    recycleTitle: "Deleted Product History",
+    recycleDesc: "These products were added previously and then deleted. Click on any product card to re-add/restore it to the shop catalog.",
+    addProductModalTitle: "Add New Product",
+    addProductModalDesc: "Create a new agricultural product listing. This will immediately show up in the catalog for all customers.",
+    lblNewProdName: "Product Name",
+    lblNewProdCategory: "Category",
+    optNewFertilisers: "Fertilisers",
+    optNewPesticides: "Pesticides",
+    optNewSeeds: "Seeds",
+    lblNewProdPrice: "Price (₹)",
+    lblNewProdStock: "Initial Stock",
+    lblNewProdDesc: "Description",
+    lblNewProdImage: "Choose Product Icon or Upload File",
+    btnUploadImage: "📂 Or Upload Shop Image File",
+    btnAddProdCancel: "Cancel",
+    btnAddProdSubmit: "Add Listing",
+    restoreModalTitle: "Restore Product",
+    restoreModalDesc: "Do you want to add this product again to the catalog?",
+    restoreModalCancel: "No",
+    restoreModalConfirm: "Yes, Add This Product",
+    toastAdded: "Added {name} to your bag!",
+    toastUpdatedStock: "Stock updated for {name} to {stock}!",
+    toastDeleted: "Moved {name} to Deleted Products Bin.",
+    toastRestored: "Restored {name} back to the catalog!",
+    toastEnterDetails: "Please fill in all customer details.",
+    toastValidPhone: "Please enter a valid 10-digit mobile number.",
+    toastEmptyCart: "Your shopping bag is empty.",
+    toastProductCreated: "New product {name} added successfully!",
+    toastImageUploaded: "Product image uploaded successfully!",
+    adminLoginTitle: "Admin Portal Login",
+    adminLoginDesc: "Please enter the administrator credentials to access the store control center.",
+    lblAdminPhone: "Admin Number",
+    lblAdminPass: "Password",
+    btnAdminLoginCancel: "Cancel",
+    btnAdminLoginSubmit: "Login",
+    toastAdminLoginSuccess: "Admin logged in successfully!",
+    toastAdminLoginFail: "Invalid admin credentials! Please try again.",
+    toastAdminLogout: "Logged out from Admin portal."
+  },
+  te: {
+    logoSub: "పురుగు మందులు, ఎరువులు మరియు విత్తనాలు",
+    searchPlaceholder: "పంట సంరక్షణ ఉత్పత్తుల కోసం వెతకండి...",
+    roleUser: "👤 వినియోగదారుడు",
+    roleAdmin: "🛠️ అడ్మిన్ మోడ్",
+    heroTag: "✨ 2012 నుండి నాణ్యమైన పంట సంరక్షణ సేవలు",
+    heroTitle: "HKGN ఉత్పత్తులతో<br><span class='gradient-text'>అధిక దిగుబడులు పొందండి</span>",
+    heroDesc: "మేము నాణ్యమైన రసాయన పురుగుమందులు, సేంద్రీయ ఎరువులు మరియు హైబ్రిడ్ విత్తనాలను అందిస్తాము. అగ్రశ్రేణి వ్యవసాయ బ్రాండ్ల అధీకృత డీలర్.",
+    heroBtnText: "🛒 ఉత్పత్తుల జాబితా",
+    heroChip1: "🚜 100% అసలైనవి",
+    heroChip2: "💧 సేంద్రీయ ఎంపికలు",
+    heroChip3: "📞 నిపుణుల సలహాలు",
+    filterTitle: "విభాగాలు",
+    filterResetBtn: "రీసెట్ చేయి",
+    catAll: "అన్ని ఉత్పత్తులు",
+    catFertilisers: "ఎరువులు",
+    catPesticides: "పురుగు మందులు",
+    catSeeds: "విత్తనాలు",
+    infoCardTitle: "హెచ్.కె.జి.ఎన్. ఏజెన్సీస్",
+    infoCardProp: "యజమాని: సిద్దీఖ్ బాషా",
+    infoCardAddress: "📍 ఆర్.టి.సి బస్టాండ్ రోడ్డు, పుంగనూరు",
+    infoCardCell: "📞 ఫోన్: 90004 76878, 90598 47718",
+    infoCardGST: "GSTIN: 37DTOPS6450N1ZN",
+    productCountText: "{count} ఉత్పత్తులు చూపబడుతున్నాయి",
+    sortLabel: "సార్ట్ చేయండి:",
+    optSortName: "అక్షర క్రమం",
+    optSortPriceLow: "ధర: తక్కువ నుండి ఎక్కువ",
+    optSortPriceHigh: "ధర: ఎక్కువ నుండి తక్కువ",
+    emptyTitle: "ఏ ఉత్పత్తులు దొరకలేదు",
+    emptyDesc: "మరో పేరుతో వెతకండి లేదా ఫిల్టర్లను రీసెట్ చేయండి.",
+    emptyBtn: "ఫిల్టర్స్ క్లియర్ చేయి",
+    inStock: "అందుబాటులో ఉంది: {stock} మూటలు",
+    outStock: "స్టాక్ లేదు",
+    onlyLeft: "కేవలం {stock} మాత్రమే ఉన్నాయి!",
+    addToBag: "సంచిలో వేయి 🛍️",
+    bagDrawerTitle: "షాపింగ్ సంచి",
+    bagSubtotal: "ఉప మొత్తం",
+    bagTotal: "మొత్తం బిల్లు",
+    btnProceedCheckout: "🔒 కొనుగోలు చేయి",
+    emptyCartText: "మీ షాపింగ్ సంచి ఖాళీగా ఉంది",
+    btnStartShopping: "కొనుగోలు ప్రారంభించు",
+    chkTitleStep1: "1",
+    chkHeadingCust: "కస్టమర్ సమాచారం",
+    lblCustName: "పూర్తి పేరు / బుకింగ్ చేసే వ్యక్తి పేరు",
+    lblCustMobile: "మొబైల్ సంఖ్య",
+    lblCustAddress: "డెలివరీ చిరునామా",
+    custNamePlaceholder: "పేరు నమోదు చేయండి",
+    custMobilePlaceholder: "10 అంకెల మొబైల్ సంఖ్య నమోదు చేయండి",
+    custAddressPlaceholder: "పూర్తి చిరునామా నమోదు చేయండి",
+    chkTitleStep2: "2",
+    chkHeadingPay: "చెల్లింపు పద్ధతి",
+    payLabelCod: "క్యాష్ ఆన్ డెలివరీ (COD)",
+    payDetailsTitle: "UPI యాప్ చెల్లింపు వివరాలు",
+    payDetailsDesc: "UPI ద్వారా సురక్షితంగా చెల్లించండి. మొత్తం బిల్లు ధర లాక్ చేయబడింది. మీరు ధరను మార్చలేరు.",
+    lblAmountLock: "లాక్ చేయబడిన బిల్లు మొత్తం (మార్చడానికి వీలులేదు)",
+    orderSummaryTitle: "ఆర్డర్ సారాంశం",
+    sumSubtotal: "ఉప మొత్తం",
+    sumTotal: "మొత్తం బిల్లు",
+    btnPlaceOrder: "💬 వాట్సాప్‌లో ఆర్డర్ చేయండి",
+    btnBackToShop: "🏪 తిరిగి దుకాణానికి",
+    adminPanelHeading: "🛠️ స్టోర్ కంట్రోల్ సెంటర్",
+    adminPanelSubheading: "ఉత్పత్తుల జాబితా, ప్రతిరోజూ స్టాక్ నవీకరణ మరియు తొలగించిన వస్తువుల పునరుద్ధరణ.",
+    adminBtnAddNew: "+ కొత్త ఉత్పత్తిని జోడించు",
+    tabCatalog: "యాక్టివ్ ఉత్పత్తులు",
+    tabRecycle: "తొలగించిన ఉత్పత్తుల సంచి",
+    thImage: "చిత్రం",
+    thName: "ఉత్పత్తి పేరు",
+    thCategory: "విభాగం",
+    thPrice: "ధర",
+    thStock: "స్టాక్ స్థాయి",
+    thActions: "చర్యలు",
+    recycleTitle: "తొలగించిన ఉత్పత్తుల చరిత్ర",
+    recycleDesc: "గతంలో జోడించి ఆపై తొలగించిన ఉత్పత్తులు ఇవి. కేటలాగ్‌కు పునరుద్ధరించడానికి ఏదైనా ఉత్పత్తిపై క్లిక్ చేయండి.",
+    addProductModalTitle: "కొత్త ఉత్పత్తిని జోడించు",
+    addProductModalDesc: "కొత్త వ్యవసాయ ఉత్పత్తిని జోడించండి. ఇది వెంటనే కేటలాగ్‌లో కనిపిస్తుంది.",
+    lblNewProdName: "ఉత్పత్తి పేరు",
+    lblNewProdCategory: "విభాగం",
+    optNewFertilisers: "ఎరువులు",
+    optNewPesticides: "పురుగు మందులు",
+    optNewSeeds: "విత్తనాలు",
+    lblNewProdPrice: "ధర (₹)",
+    lblNewProdStock: "ప్రారంభ స్టాక్",
+    lblNewProdDesc: "వివరణ",
+    lblNewProdImage: "ఉత్పత్తి చిహ్నం లేదా చిత్రం అప్‌లోడ్ చేయండి",
+    btnUploadImage: "📂 లేదా ఫోన్ గ్యాలరీ చిత్రం అప్‌లోడ్ చేయి",
+    btnAddProdCancel: "రద్దు చేయి",
+    btnAddProdSubmit: "ఉత్పత్తిని జోడించు",
+    restoreModalTitle: "ఉత్పత్తిని పునరుద్ధరించు",
+    restoreModalDesc: "ఈ ఉత్పత్తిని మళ్లీ దుకాణం కేటలాగ్‌లోకి జోడించాలనుకుంటున్నారా?",
+    restoreModalCancel: "వద్దు",
+    restoreModalConfirm: "అవును, జోడించు",
+    toastAdded: "సంచిలో {name} విజయవంతంగా జోడించబడింది!",
+    toastUpdatedStock: "{name} స్టాక్ స్థాయి {stock} కి నవీకరించబడింది!",
+    toastDeleted: "{name} తొలగించిన ఉత్పత్తుల సంచికి తరలించబడింది.",
+    toastRestored: "{name} విజయవంతంగా దుకాణంలోకి పునరుద్ధరించబడింది!",
+    toastEnterDetails: "దయచేసి కస్టమర్ వివరాలన్నీ నమోదు చేయండి.",
+    toastValidPhone: "దయచేసి సరైన 10 అంకెల మొబైల్ సంఖ్యను నమోదు చేయండి.",
+    toastEmptyCart: "మీ షాపింగ్ సంచి ఖాళీగా ఉంది.",
+    toastProductCreated: "కొత్త ఉత్పత్తి {name} విజయవంతంగా జోడించబడింది!",
+    toastImageUploaded: "ఉత్పత్తి చిత్రం విజయవంతంగా అప్‌లోడ్ చేయబడింది!",
+    adminLoginTitle: "అడ్మిన్ లాగిన్",
+    adminLoginDesc: "స్టోర్ కంట్రోల్ సెంటర్ ప్రవేశించడానికి అడ్మినిస్ట్రేటర్ ఆధారాలను నమోదు చేయండి.",
+    lblAdminPhone: "అడ్మిన్ నంబర్",
+    lblAdminPass: "పాస్‌వర్డ్",
+    btnAdminLoginCancel: "రద్దు చేయి",
+    btnAdminLoginSubmit: "లాగిన్",
+    toastAdminLoginSuccess: "అడ్మిన్ లాగిన్ విజయవంతమైంది!",
+    toastAdminLoginFail: "తప్పుడు అడ్మిన్ వివరాలు! దయచేసి మళ్లీ ప్రయత్నించండి.",
+    toastAdminLogout: "అడ్మిన్ పోర్టల్ నుండి విజయవంతంగా నిష్క్రమించారు."
+  }
+};
+
+/* ============================================================
+   INITIAL SEED PRODUCTS (Loaded only once to LocalStorage)
+============================================================ */
+const SEED_PRODUCTS = [
+  {
+    id: 1,
+    name: "Urea Fertiliser (50kg Bag)",
+    category: "fertilisers",
+    price: 350,
+    stock: 25,
+    image: "🌾",
+    description: "High-quality nitrogenous fertiliser essential for boosting leafy green crop growth and crop health."
+  },
+  {
+    id: 2,
+    name: "DAP Fertiliser (50kg Bag)",
+    category: "fertilisers",
+    price: 1350,
+    stock: 18,
+    image: "📦",
+    description: "Diammonium Phosphate containing rich phosphate content for healthy root systems and early crop vigor."
+  },
+  {
+    id: 3,
+    name: "Organic Neem Oil Pesticide (1 Litre)",
+    category: "pesticides",
+    price: 280,
+    stock: 45,
+    image: "🧪",
+    description: "Cold-pressed pure organic neem oil pesticide. Safe bio-control against aphids, whiteflies, and scale pests."
+  },
+  {
+    id: 4,
+    name: "Hybrid Tomato Seeds (100g Pack)",
+    category: "seeds",
+    price: 150,
+    stock: 30,
+    image: "🌻",
+    description: "High germination rate hybrid tomato seeds. Yields firm, bright red tomatoes with excellent shelf life."
+  },
+  {
+    id: 5,
+    name: "BT Cotton Seeds (Jadoo - 450g Pack)",
+    category: "seeds",
+    price: 860,
+    stock: 0,
+    image: "🌾",
+    description: "Premium high-boll capacity BT Cotton seeds resistant to bollworms. Note: Currently Out of Stock."
+  }
+];
+
+/* ============================================================
+   APPLICATION STATE
+============================================================ */
+let state = {
+  products: [],
+  deletedProducts: [],
+  cart: [],
+  language: "en", // "en" or "te"
+  role: "user",   // "user" or "admin"
+  theme: "dark",  // "dark" or "light"
+  filters: {
+    category: "all",
+    search: ""
+  },
+  sortBy: "name",
+  checkoutActive: false,
+  selectedPaymentMode: "COD",
+  activeAdminTab: "catalog",
+  tempSelectedEmoji: "🌾",
+  uploadedImageBase64: null,
+  restoreTargetProduct: null
+};
+
+/* ============================================================
+   CORE RUNTIME INITIALIZATION
+============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+  loadStateFromStorage();
+  syncDOMTheme();
+  renderApp();
+});
+
+function loadStateFromStorage() {
+  // Products
+  const savedProducts = localStorage.getItem("hkgn_products");
+  if (savedProducts) {
+    state.products = JSON.parse(savedProducts);
+  } else {
+    state.products = [...SEED_PRODUCTS];
+    localStorage.setItem("hkgn_products", JSON.stringify(state.products));
+  }
+
+  // Deleted Products History (Recycle Bin)
+  const savedDeleted = localStorage.getItem("hkgn_deleted_products");
+  if (savedDeleted) {
+    state.deletedProducts = JSON.parse(savedDeleted);
+  } else {
+    state.deletedProducts = [];
+    localStorage.setItem("hkgn_deleted_products", JSON.stringify([]));
+  }
+
+  // Cart
+  const savedCart = localStorage.getItem("hkgn_cart");
+  if (savedCart) {
+    state.cart = JSON.parse(savedCart);
+  } else {
+    state.cart = [];
+  }
+
+  // Settings
+  state.language = localStorage.getItem("hkgn_lang") || "en";
+  state.role = localStorage.getItem("hkgn_role") || "user";
+  state.theme = localStorage.getItem("hkgn_theme") || "dark";
+}
+
+function saveProductsToStorage() {
+  localStorage.setItem("hkgn_products", JSON.stringify(state.products));
+}
+
+function saveDeletedProductsToStorage() {
+  localStorage.setItem("hkgn_deleted_products", JSON.stringify(state.deletedProducts));
+}
+
+function saveCartToStorage() {
+  localStorage.setItem("hkgn_cart", JSON.stringify(state.cart));
+}
+
+/* ============================================================
+   THEMING
+============================================================ */
+function toggleTheme() {
+  state.theme = state.theme === "dark" ? "light" : "dark";
+  localStorage.setItem("hkgn_theme", state.theme);
+  syncDOMTheme();
+}
+
+function syncDOMTheme() {
+  const body = document.body;
+  const themeBtn = document.getElementById("themeToggle");
+  
+  if (state.theme === "light") {
+    body.classList.remove("dark-theme");
+    body.classList.add("light-theme");
+    if (themeBtn) themeBtn.innerHTML = "<span>☀️</span>";
+  } else {
+    body.classList.remove("light-theme");
+    body.classList.add("dark-theme");
+    if (themeBtn) themeBtn.innerHTML = "<span>🌙</span>";
+  }
+}
+
+/* ============================================================
+   ROLE & LANGUAGE TOGGLING
+============================================================ */
+function setLanguage(lang) {
+  state.language = lang;
+  localStorage.setItem("hkgn_lang", lang);
+  
+  // Style active language button
+  document.getElementById("langBtnEn").classList.toggle("active", lang === "en");
+  document.getElementById("langBtnTe").classList.toggle("active", lang === "te");
+
+  renderTranslations();
+  renderProductsGrid();
+  renderCartDrawer();
+  renderCheckoutView();
+  renderAdminPanel();
+}
+
+function toggleRole() {
+  const dict = TRANSLATIONS[state.language];
+  if (state.role === "admin") {
+    // Log out admin
+    state.role = "user";
+    localStorage.setItem("hkgn_role", "user");
+    state.checkoutActive = false;
+    showToast(dict.toastAdminLogout);
+    renderApp();
+  } else {
+    // Open password login gate
+    openAdminLoginModal();
+  }
+}
+
+function renderApp() {
+  const userStoreSection = document.getElementById("userStoreSection");
+  const heroSection = document.getElementById("heroSection");
+  const adminSection = document.getElementById("adminSection");
+  const checkoutSection = document.getElementById("checkoutSection");
+  const roleToggleBtn = document.getElementById("roleToggleBtn");
+  const searchWrapper = document.getElementById("headerSearchWrapper");
+
+  // Sync role badge styles
+  roleToggleBtn.className = state.role === "admin" ? "role-badge admin-role" : "role-badge";
+
+  if (state.role === "admin") {
+    userStoreSection.style.display = "none";
+    heroSection.style.display = "none";
+    checkoutSection.style.display = "none";
+    searchWrapper.style.display = "none";
+    adminSection.style.display = "block";
+    renderAdminPanel();
+  } else {
+    adminSection.style.display = "none";
+    if (state.checkoutActive) {
+      userStoreSection.style.display = "none";
+      heroSection.style.display = "none";
+      checkoutSection.style.display = "block";
+      searchWrapper.style.display = "none";
+      renderCheckoutView();
+    } else {
+      userStoreSection.style.display = "block";
+      heroSection.style.display = "grid";
+      checkoutSection.style.display = "none";
+      searchWrapper.style.display = "block";
+      renderProductsGrid();
+    }
+  }
+
+  renderTranslations();
+  updateBagBadge();
+}
+
+function renderTranslations() {
+  const dict = TRANSLATIONS[state.language];
+
+  // Headers & Logos
+  document.getElementById("logoSub").textContent = dict.logoSub;
+  document.getElementById("searchInput").placeholder = dict.searchPlaceholder;
+  document.getElementById("roleLabel").textContent = state.role === "admin" ? dict.roleAdmin : dict.roleUser;
+
+  // Hero Section
+  document.getElementById("heroTag").textContent = dict.heroTag;
+  document.getElementById("heroTitle").innerHTML = dict.heroTitle;
+  document.getElementById("heroDesc").textContent = dict.heroDesc;
+  document.getElementById("heroChip1").textContent = dict.heroChip1;
+  document.getElementById("heroChip2").textContent = dict.heroChip2;
+  document.getElementById("heroChip3").textContent = dict.heroChip3;
+  
+  // Sidebar Filters
+  document.getElementById("filterTitle").textContent = dict.filterTitle;
+  document.getElementById("filterResetBtn").textContent = dict.filterResetBtn;
+  document.getElementById("catAll").textContent = dict.catAll;
+  document.getElementById("catFertilisers").textContent = dict.catFertilisers;
+  document.getElementById("catPesticides").textContent = dict.catPesticides;
+  document.getElementById("catSeeds").textContent = dict.catSeeds;
+
+  // Sidebar info card
+  document.getElementById("infoCardTitle").textContent = dict.infoCardTitle;
+  document.getElementById("infoCardProp").textContent = dict.infoCardProp;
+  document.getElementById("infoCardAddress").textContent = dict.infoCardAddress;
+  document.getElementById("infoCardCell").textContent = dict.infoCardCell;
+  document.getElementById("infoCardGST").textContent = dict.infoCardGST;
+
+  // Sort labels
+  document.getElementById("sortLabel").textContent = dict.sortLabel;
+  document.getElementById("optSortName").textContent = dict.optSortName;
+  document.getElementById("optSortPriceLow").textContent = dict.optSortPriceLow;
+  document.getElementById("optSortPriceHigh").textContent = dict.optSortPriceHigh;
+
+  // Empty state translations
+  document.getElementById("emptyTitle").textContent = dict.emptyTitle;
+  document.getElementById("emptyDesc").textContent = dict.emptyDesc;
+  document.getElementById("emptyBtn").textContent = dict.emptyBtn;
+
+  // Bag drawer
+  document.getElementById("bagDrawerTitle").textContent = dict.bagDrawerTitle;
+  document.getElementById("bagSubtotal").textContent = dict.bagSubtotal;
+  document.getElementById("bagTotal").textContent = dict.bagTotal;
+  document.getElementById("btnProceedCheckout").textContent = dict.btnProceedCheckout;
+
+  // Checkout labels
+  document.getElementById("chkTitleStep1").textContent = dict.chkTitleStep1;
+  document.getElementById("chkHeadingCust").textContent = dict.chkHeadingCust;
+  document.getElementById("lblCustName").textContent = dict.lblCustName;
+  document.getElementById("lblCustMobile").textContent = dict.lblCustMobile;
+  document.getElementById("lblCustAddress").textContent = dict.lblCustAddress;
+  document.getElementById("custName").placeholder = dict.custNamePlaceholder;
+  document.getElementById("custMobile").placeholder = dict.custMobilePlaceholder;
+  document.getElementById("custAddress").placeholder = dict.custAddressPlaceholder;
+  document.getElementById("chkTitleStep2").textContent = dict.chkTitleStep2;
+  document.getElementById("chkHeadingPay").textContent = dict.chkHeadingPay;
+  document.getElementById("payLabelCod").textContent = dict.payLabelCod;
+  document.getElementById("payDetailsTitle").textContent = dict.payDetailsTitle;
+  document.getElementById("payDetailsDesc").textContent = dict.payDetailsDesc;
+  document.getElementById("lblAmountLock").textContent = dict.lblAmountLock;
+  document.getElementById("orderSummaryTitle").textContent = dict.orderSummaryTitle;
+  document.getElementById("sumSubtotal").textContent = dict.sumSubtotal;
+  document.getElementById("sumTotal").textContent = dict.sumTotal;
+  document.getElementById("btnPlaceOrder").textContent = dict.btnPlaceOrder;
+  document.getElementById("btnBackToShop").textContent = dict.btnBackToShop;
+
+  // Admin Portal labels
+  document.getElementById("adminPanelHeading").textContent = dict.adminPanelHeading;
+  document.getElementById("adminPanelSubheading").textContent = dict.adminPanelSubheading;
+  document.getElementById("adminBtnAddNew").textContent = dict.adminBtnAddNew;
+  document.getElementById("tabCatalog").textContent = dict.tabCatalog;
+  document.getElementById("tabRecycle").textContent = dict.tabRecycle;
+  document.getElementById("thImage").textContent = dict.thImage;
+  document.getElementById("thName").textContent = dict.thName;
+  document.getElementById("thCategory").textContent = dict.thCategory;
+  document.getElementById("thPrice").textContent = dict.thPrice;
+  document.getElementById("thStock").textContent = dict.thStock;
+  document.getElementById("thActions").textContent = dict.thActions;
+  document.getElementById("recycleTitle").textContent = dict.recycleTitle;
+  document.getElementById("recycleDesc").textContent = dict.recycleDesc;
+
+  // Add product modal
+  document.getElementById("addProductModalTitle").textContent = dict.addProductModalTitle;
+  document.getElementById("addProductModalDesc").textContent = dict.addProductModalDesc;
+  document.getElementById("lblNewProdName").textContent = dict.lblNewProdName;
+  document.getElementById("lblNewProdCategory").textContent = dict.lblNewProdCategory;
+  document.getElementById("optNewFertilisers").textContent = dict.optNewFertilisers;
+  document.getElementById("optNewPesticides").textContent = dict.optNewPesticides;
+  document.getElementById("optNewSeeds").textContent = dict.optNewSeeds;
+  document.getElementById("lblNewProdPrice").textContent = dict.lblNewProdPrice;
+  document.getElementById("lblNewProdStock").textContent = dict.lblNewProdStock;
+  document.getElementById("lblNewProdDesc").textContent = dict.lblNewProdDesc;
+  document.getElementById("lblNewProdImage").textContent = dict.lblNewProdImage;
+  document.getElementById("btnUploadImage").textContent = dict.btnUploadImage;
+  document.getElementById("btnAddProdCancel").textContent = dict.btnAddProdCancel;
+  document.getElementById("btnAddProdSubmit").textContent = dict.btnAddProdSubmit;
+
+  // Confirm restore modal
+  document.getElementById("restoreModalTitle").textContent = dict.restoreModalTitle;
+  document.getElementById("restoreModalDesc").textContent = dict.restoreModalDesc;
+  document.getElementById("restoreModalCancel").textContent = dict.restoreModalCancel;
+  document.getElementById("restoreModalConfirm").textContent = dict.restoreModalConfirm;
+
+  // Admin Login modal
+  document.getElementById("adminLoginTitle").textContent = dict.adminLoginTitle;
+  document.getElementById("adminLoginDesc").textContent = dict.adminLoginDesc;
+  document.getElementById("lblAdminPhone").textContent = dict.lblAdminPhone;
+  document.getElementById("lblAdminPass").textContent = dict.lblAdminPass;
+  document.getElementById("btnAdminLoginCancel").textContent = dict.btnAdminLoginCancel;
+  document.getElementById("btnAdminLoginSubmit").textContent = dict.btnAdminLoginSubmit;
+}
+
+
+/* ============================================================
+   USER CATALOG & FILTER ACTION
+============================================================ */
+function scrollToCatalog() {
+  document.getElementById("userStoreSection").scrollIntoView({ behavior: "smooth" });
+}
+
+function handleSearch(val) {
+  state.filters.search = val.toLowerCase().trim();
+  renderProductsGrid();
+}
+
+function setCategory(cat, btn) {
+  state.filters.category = cat;
+  
+  // Highlight active sidebar pill
+  document.querySelectorAll(".category-pill").forEach(el => el.classList.remove("active"));
+  btn.classList.add("active");
+
+  renderProductsGrid();
+}
+
+function clearFilters() {
+  state.filters.category = "all";
+  state.filters.search = "";
+  document.getElementById("searchInput").value = "";
+  
+  document.querySelectorAll(".category-pill").forEach(el => el.classList.remove("active"));
+  document.getElementById("catAll").classList.add("active");
+
+  renderProductsGrid();
+}
+
+function handleSort(val) {
+  state.sortBy = val;
+  renderProductsGrid();
+}
+
+/* ============================================================
+   PRODUCTS GRID RENDER
+============================================================ */
+function renderProductsGrid() {
+  const grid = document.getElementById("productsGrid");
+  const emptyState = document.getElementById("emptyState");
+  const countText = document.getElementById("productCountText");
+  const dict = TRANSLATIONS[state.language];
+
+  // Filter
+  let filtered = state.products.filter(p => {
+    const matchesCat = state.filters.category === "all" || p.category === state.filters.category;
+    
+    // Search is bilingual
+    const nameMatch = p.name.toLowerCase().includes(state.filters.search);
+    const descMatch = p.description.toLowerCase().includes(state.filters.search);
+    
+    return matchesCat && (nameMatch || descMatch);
+  });
+
+  // Sort
+  if (state.sortBy === "name") {
+    filtered.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (state.sortBy === "price-low") {
+    filtered.sort((a, b) => a.price - b.price);
+  } else if (state.sortBy === "price-high") {
+    filtered.sort((a, b) => b.price - a.price);
+  }
+
+  // Count text
+  countText.textContent = dict.productCountText.replace("{count}", filtered.length);
+
+  // Render
+  grid.innerHTML = "";
+  if (filtered.length === 0) {
+    emptyState.style.display = "block";
+    grid.style.display = "none";
+  } else {
+    emptyState.style.display = "none";
+    grid.style.display = "grid";
+
+    filtered.forEach(p => {
+      const isOutOfStock = p.stock <= 0;
+      
+      // Stock Badge text & color
+      let stockBadgeText = "";
+      let stockBadgeClass = "";
+      if (isOutOfStock) {
+        stockBadgeText = dict.outStock;
+        stockBadgeClass = "out-stock";
+      } else if (p.stock <= 5) {
+        stockBadgeText = dict.onlyLeft.replace("{stock}", p.stock);
+        stockBadgeClass = "out-stock"; // highlight warning in red
+      } else {
+        stockBadgeText = dict.inStock.replace("{stock}", p.stock);
+        stockBadgeClass = "in-stock";
+      }
+
+      // Image or emoji render
+      const isBase64 = p.image.startsWith("data:");
+      const imageTag = isBase64 
+        ? `<img src="${p.image}" alt="${p.name}" class="product-image" />`
+        : `<span style="font-size: 5.5rem;">${p.image}</span>`;
+
+      const card = document.createElement("div");
+      card.className = "product-card glass-card";
+      card.innerHTML = `
+        <div class="product-image-container">
+          ${isOutOfStock ? `<span class="product-tag badge badge-danger">${dict.outStock}</span>` : ""}
+          ${imageTag}
+        </div>
+        <div class="product-info">
+          <span class="product-category">${dict["cat" + p.category.charAt(0).toUpperCase() + p.category.slice(1)] || p.category}</span>
+          <h4 class="product-title">${p.name}</h4>
+          <p class="product-desc">${p.description}</p>
+          <div class="product-meta-row">
+            <span class="product-price">₹${p.price}</span>
+            <span class="product-stock ${stockBadgeClass}">${stockBadgeText}</span>
+          </div>
+          <button class="btn-primary btn-full" onclick="addToBag(${p.id})" ${isOutOfStock ? "disabled" : ""}>
+            ${isOutOfStock ? dict.outStock : dict.addToBag}
+          </button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+}
+
+/* ============================================================
+   SHOPPING BAG / CART FUNCTIONALITY
+============================================================ */
+function updateBagBadge() {
+  const badge = document.getElementById("bagCount");
+  const count = state.cart.reduce((sum, item) => sum + item.qty, 0);
+  badge.textContent = count;
+}
+
+function toggleCartDrawer(open) {
+  const drawer = document.getElementById("cartDrawer");
+  const overlay = document.getElementById("cartOverlay");
+  
+  if (open) {
+    renderCartDrawer();
+    drawer.classList.add("active");
+    overlay.classList.add("active");
+  } else {
+    drawer.classList.remove("active");
+    overlay.classList.remove("active");
+  }
+}
+
+function addToBag(prodId) {
+  const prod = state.products.find(p => p.id === prodId);
+  if (!prod || prod.stock <= 0) return;
+
+  const cartItem = state.cart.find(item => item.id === prodId);
+  const dict = TRANSLATIONS[state.language];
+
+  if (cartItem) {
+    if (cartItem.qty < prod.stock) {
+      cartItem.qty += 1;
+      showToast(dict.toastAdded.replace("{name}", prod.name));
+    } else {
+      showToast(`${dict.onlyLeft.replace("{stock}", prod.stock)}`, true);
+    }
+  } else {
+    state.cart.push({
+      id: prod.id,
+      name: prod.name,
+      price: prod.price,
+      image: prod.image,
+      qty: 1
+    });
+    showToast(dict.toastAdded.replace("{name}", prod.name));
+  }
+
+  saveCartToStorage();
+  updateBagBadge();
+  renderProductsGrid();
+}
+
+function updateCartQty(prodId, change) {
+  const item = state.cart.find(i => i.id === prodId);
+  const prod = state.products.find(p => p.id === prodId);
+  if (!item || !prod) return;
+
+  const newQty = item.qty + change;
+  if (newQty <= 0) {
+    state.cart = state.cart.filter(i => i.id !== prodId);
+  } else if (newQty <= prod.stock) {
+    item.qty = newQty;
+  } else {
+    const dict = TRANSLATIONS[state.language];
+    showToast(`${dict.onlyLeft.replace("{stock}", prod.stock)}`, true);
+  }
+
+  saveCartToStorage();
+  updateBagBadge();
+  renderCartDrawer();
+}
+
+function removeFromCart(prodId) {
+  state.cart = state.cart.filter(i => i.id !== prodId);
+  saveCartToStorage();
+  updateBagBadge();
+  renderCartDrawer();
+}
+
+function renderCartDrawer() {
+  const container = document.getElementById("bagDrawerItems");
+  const footer = document.getElementById("bagDrawerFooter");
+  const subtotalVal = document.getElementById("bagSubtotalVal");
+  const totalVal = document.getElementById("bagTotalVal");
+  const dict = TRANSLATIONS[state.language];
+
+  if (state.cart.length === 0) {
+    container.innerHTML = `
+      <div class="empty-cart-state">
+        <span class="empty-cart-icon">👜</span>
+        <p>${dict.emptyCartText}</p>
+        <button class="btn-primary" style="margin-top: 15px;" onclick="toggleCartDrawer(false)">
+          ${dict.btnStartShopping}
+        </button>
+      </div>
+    `;
+    footer.style.display = "none";
+    return;
+  }
+
+  footer.style.display = "block";
+  container.innerHTML = "";
+
+  let subtotal = 0;
+
+  state.cart.forEach(item => {
+    const itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+
+    const isBase64 = item.image.startsWith("data:");
+    const imageTag = isBase64 
+      ? `<img src="${item.image}" alt="${item.name}" />`
+      : `<span style="font-size: 1.8rem;">${item.image}</span>`;
+
+    const row = document.createElement("div");
+    row.className = "cart-item";
+    row.innerHTML = `
+      <div class="cart-item-img">
+        ${imageTag}
+      </div>
+      <div class="cart-item-details">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">₹${item.price}</div>
+        <div class="cart-item-actions">
+          <div class="cart-qty">
+            <span class="cart-qty-btn" onclick="updateCartQty(${item.id}, -1)">-</span>
+            <span class="cart-qty-val">${item.qty}</span>
+            <span class="cart-qty-btn" onclick="updateCartQty(${item.id}, 1)">+</span>
+          </div>
+          <span class="cart-item-remove" onclick="removeFromCart(${item.id})">✕</span>
+        </div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+
+  subtotalVal.textContent = `₹${subtotal}`;
+  totalVal.textContent = `₹${subtotal}`;
+}
+
+function checkoutFromBag() {
+  toggleCartDrawer(false);
+  state.checkoutActive = true;
+  renderApp();
+}
+
+/* ============================================================
+   USER CHECKOUT FLOW
+============================================================ */
+function showCatalogView() {
+  state.checkoutActive = false;
+  renderApp();
+}
+
+function setPaymentMode(mode) {
+  state.selectedPaymentMode = mode;
+  
+  // Highlight chosen button
+  document.getElementById("payModeCod").classList.toggle("active", mode === "COD");
+  document.getElementById("payModePhonepe").classList.toggle("active", mode === "PhonePe");
+  document.getElementById("payModeGpay").classList.toggle("active", mode === "GooglePay");
+  document.getElementById("payModePaytm").classList.toggle("active", mode === "Paytm");
+
+  // Show/Hide Locked UPI App block
+  const upiBlock = document.getElementById("paymentAppBlock");
+  if (mode === "COD") {
+    upiBlock.classList.remove("active");
+  } else {
+    upiBlock.classList.add("active");
+  }
+}
+
+function renderCheckoutView() {
+  const listContainer = document.getElementById("checkoutSummaryItems");
+  const subtotalVal = document.getElementById("chkSubtotalVal");
+  const totalVal = document.getElementById("chkTotalVal");
+  const lockedDisplay = document.getElementById("lockedAmountDisplay");
+  const dict = TRANSLATIONS[state.language];
+
+  if (state.cart.length === 0) {
+    listContainer.innerHTML = `<p class="text-center" style="color:var(--text-secondary);">${dict.emptyCartText}</p>`;
+    subtotalVal.textContent = "₹0.00";
+    totalVal.textContent = "₹0.00";
+    lockedDisplay.textContent = "₹0.00";
+    return;
+  }
+
+  listContainer.innerHTML = "";
+  let subtotal = 0;
+
+  state.cart.forEach(item => {
+    const itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+
+    const row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.justify = "space-between";
+    row.style.fontSize = "0.85rem";
+    row.style.marginBottom = "8px";
+    row.style.color = "var(--text-secondary)";
+    row.innerHTML = `
+      <span>${item.name} <strong>x${item.qty}</strong></span>
+      <span>₹${itemTotal}</span>
+    `;
+    listContainer.appendChild(row);
+  });
+
+  subtotalVal.textContent = `₹${subtotal}`;
+  totalVal.textContent = `₹${subtotal}`;
+  lockedDisplay.textContent = `₹${subtotal}`;
+}
+
+function submitOrder() {
+  const name = document.getElementById("custName").value.trim();
+  const mobile = document.getElementById("custMobile").value.trim();
+  const address = document.getElementById("custAddress").value.trim();
+  const dict = TRANSLATIONS[state.language];
+
+  if (!name || !mobile || !address) {
+    showToast(dict.toastEnterDetails, true);
+    return;
+  }
+
+  // Validate 10 digit phone number
+  const cleanPhone = mobile.replace(/[^0-9]/g, "");
+  if (cleanPhone.length < 10) {
+    showToast(dict.toastValidPhone, true);
+    return;
+  }
+
+  if (state.cart.length === 0) {
+    showToast(dict.toastEmptyCart, true);
+    return;
+  }
+
+  // Calculate total
+  let total = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+  // Formulate items list text
+  let itemsText = "";
+  state.cart.forEach(item => {
+    itemsText += `\n- ${item.qty}x ${item.name} (₹${item.price} each) - ₹${item.price * item.qty}`;
+  });
+
+  // Construct message template
+  const textMessage = 
+`🔔 *NEW BOOKING ORDER - HKGN AGENCIES* 🌾
+---------------------------------------------
+👤 *Customer Name:* ${name}
+📱 *Contact Number:* ${mobile}
+📍 *Delivery Address:* ${address}
+💳 *Payment Mode:* ${state.selectedPaymentMode}
+
+📦 *Items Ordered:*${itemsText}
+
+💰 *Total Amount:* ₹${total} (Locked Amount)
+---------------------------------------------
+_Order placed via HKGN Store Web Application_`;
+
+  // Encode message for URL
+  const encodedText = encodeURIComponent(textMessage);
+  
+  // target number: admin Siddiq Basha
+  const adminWhatsAppNumber = "919391595381"; 
+
+  // Open WhatsApp Link
+  const waUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodedText}`;
+  window.open(waUrl, "_blank");
+
+  // Deduct stock levels in state locally
+  state.cart.forEach(cartItem => {
+    const dbProduct = state.products.find(p => p.id === cartItem.id);
+    if (dbProduct) {
+      dbProduct.stock = Math.max(0, dbProduct.stock - cartItem.qty);
+    }
+  });
+
+  // Reset cart
+  state.cart = [];
+  saveCartToStorage();
+  saveProductsToStorage();
+  updateBagBadge();
+
+  // Redirect back to catalog
+  state.checkoutActive = false;
+  showToast(state.language === "en" ? "Order initiated on WhatsApp successfully!" : "ఆర్డర్ విజయవంతంగా వాట్సాప్‌లో పంపబడింది!");
+  renderApp();
+}
+
+/* ============================================================
+   ADMIN CONTROL PANEL
+============================================================ */
+function switchAdminTab(tab) {
+  state.activeAdminTab = tab;
+  
+  document.getElementById("tabCatalog").classList.toggle("active", tab === "catalog");
+  document.getElementById("tabRecycle").classList.toggle("active", tab === "recycle");
+
+  document.getElementById("adminTabCatalogContent").style.display = tab === "catalog" ? "block" : "none";
+  document.getElementById("adminTabRecycleContent").style.display = tab === "recycle" ? "block" : "none";
+
+  renderAdminPanel();
+}
+
+function renderAdminPanel() {
+  if (state.activeAdminTab === "catalog") {
+    const tableBody = document.getElementById("adminCatalogTableBody");
+    tableBody.innerHTML = "";
+
+    state.products.forEach(p => {
+      const isBase64 = p.image.startsWith("data:");
+      const imageTag = isBase64 
+        ? `<img src="${p.image}" alt="${p.name}" />`
+        : `<span style="font-size: 1.8rem;">${p.image}</span>`;
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>
+          <div class="admin-prod-thumb">
+            ${imageTag}
+          </div>
+        </td>
+        <td style="font-weight:600;">${p.name}</td>
+        <td><span class="badge badge-primary">${p.category}</span></td>
+        <td style="font-weight:700; color:var(--accent-color);">₹${p.price}</td>
+        <td>
+          <div class="stock-control">
+            <span class="stock-btn" onclick="adjustAdminStock(${p.id}, -1)">-</span>
+            <input type="number" class="stock-input" id="stockIn-${p.id}" value="${p.stock}" min="0" onchange="saveAdminStockChange(${p.id}, this.value)" />
+            <span class="stock-btn" onclick="adjustAdminStock(${p.id}, 1)">+</span>
+          </div>
+        </td>
+        <td>
+          <button class="btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑️ Delete</button>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    });
+  } else {
+    // Recycle Bin
+    const recycleGrid = document.getElementById("adminRecycleBinGrid");
+    recycleGrid.innerHTML = "";
+
+    if (state.deletedProducts.length === 0) {
+      recycleGrid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align:center; padding: 40px; color:var(--text-secondary);">
+          <span style="font-size: 3rem;">📦</span>
+          <p style="margin-top: 10px;">The Deleted Bin is empty.</p>
+        </div>
+      `;
+      return;
+    }
+
+    state.deletedProducts.forEach(p => {
+      const isBase64 = p.image.startsWith("data:");
+      const imageTag = isBase64 
+        ? `<img src="${p.image}" alt="${p.name}" style="max-width:32px; max-height:32px; object-fit:contain;" />`
+        : `<span style="font-size: 1.8rem;">${p.image}</span>`;
+
+      const card = document.createElement("div");
+      card.className = "recycle-card glass-card";
+      card.onclick = () => triggerRestorePopup(p);
+      card.innerHTML = `
+        <div class="admin-prod-thumb" style="width:40px; height:40px;">
+          ${imageTag}
+        </div>
+        <div class="recycle-info">
+          <h4>${p.name}</h4>
+          <p>₹${p.price} | Stock: ${p.stock}</p>
+        </div>
+        <span style="color:var(--primary-color); font-size:1.1rem;">♻️</span>
+      `;
+      recycleGrid.appendChild(card);
+    });
+  }
+}
+
+// Daily stock updates in Admin Mode
+function adjustAdminStock(prodId, change) {
+  const input = document.getElementById(`stockIn-${prodId}`);
+  if (!input) return;
+  
+  let val = parseInt(input.value) || 0;
+  val = Math.max(0, val + change);
+  input.value = val;
+  
+  saveAdminStockChange(prodId, val);
+}
+
+function saveAdminStockChange(prodId, val) {
+  const prod = state.products.find(p => p.id === prodId);
+  if (!prod) return;
+
+  const intVal = parseInt(val);
+  prod.stock = isNaN(intVal) ? 0 : Math.max(0, intVal);
+  
+  saveProductsToStorage();
+  
+  // Show toast feedback
+  const dict = TRANSLATIONS[state.language];
+  showToast(dict.toastUpdatedStock.replace("{name}", prod.name).replace("{stock}", prod.stock));
+  
+  // If in user mode, update badge, but this runs in admin
+  renderAdminPanel();
+}
+
+function deleteProduct(prodId) {
+  const prodIndex = state.products.findIndex(p => p.id === prodId);
+  if (prodIndex === -1) return;
+
+  const prod = state.products[prodIndex];
+  
+  // Add to deleted bin
+  state.deletedProducts.push(prod);
+  saveDeletedProductsToStorage();
+
+  // Remove from active
+  state.products.splice(prodIndex, 1);
+  saveProductsToStorage();
+
+  const dict = TRANSLATIONS[state.language];
+  showToast(dict.toastDeleted.replace("{name}", prod.name));
+
+  // Render
+  renderAdminPanel();
+}
+
+/* ============================================================
+   RESTORE MODAL / BIN RECOVERY
+============================================================ */
+function triggerRestorePopup(product) {
+  state.restoreTargetProduct = product;
+  
+  const modal = document.getElementById("confirmRestoreModal");
+  modal.classList.add("active");
+}
+
+function closeRestoreModal(confirm) {
+  const modal = document.getElementById("confirmRestoreModal");
+  modal.classList.remove("active");
+
+  const p = state.restoreTargetProduct;
+  if (confirm && p) {
+    // Restore
+    state.products.push(p);
+    saveProductsToStorage();
+
+    state.deletedProducts = state.deletedProducts.filter(item => item.id !== p.id);
+    saveDeletedProductsToStorage();
+
+    const dict = TRANSLATIONS[state.language];
+    showToast(dict.toastRestored.replace("{name}", p.name));
+  }
+
+  state.restoreTargetProduct = null;
+  renderAdminPanel();
+}
+
+/* ============================================================
+   ADD NEW PRODUCT FORM ACTIONS
+============================================================ */
+function openAddProductModal() {
+  document.getElementById("addProductModal").classList.add("active");
+  // reset file upload temp state
+  state.uploadedImageBase64 = null;
+  state.tempSelectedEmoji = "🌾";
+  
+  // Clear select wrappers
+  document.querySelectorAll(".img-select-option").forEach(el => el.classList.remove("active"));
+  document.querySelector('.img-select-option[data-img-emoji="🌾"]').classList.add("active");
+  
+  document.getElementById("imageUploadStatus").textContent = "";
+  document.getElementById("addProductForm").reset();
+}
+
+function closeAddProductModal(e) {
+  // If clicked close icon or cancel btn
+  if (!e || e.target.classList.contains("modal-overlay")) {
+    document.getElementById("addProductModal").classList.remove("active");
+  }
+}
+
+function selectNewProductEmoji(emoji, element) {
+  state.tempSelectedEmoji = emoji;
+  state.uploadedImageBase64 = null; // override base64 if emoji is clicked
+  
+  document.querySelectorAll(".img-select-option").forEach(el => el.classList.remove("active"));
+  element.classList.add("active");
+  
+  document.getElementById("imageUploadStatus").textContent = "";
+}
+
+function handleImageUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    state.uploadedImageBase64 = e.target.result;
+    
+    // De-select emoji cards
+    document.querySelectorAll(".img-select-option").forEach(el => el.classList.remove("active"));
+    
+    const dict = TRANSLATIONS[state.language];
+    document.getElementById("imageUploadStatus").textContent = dict.toastImageUploaded;
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleAddProductSubmit(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("newProdName").value.trim();
+  const category = document.getElementById("newProdCategory").value;
+  const price = parseInt(document.getElementById("newProdPrice").value) || 0;
+  const stock = parseInt(document.getElementById("newProdStock").value) || 0;
+  const desc = document.getElementById("newProdDesc").value.trim();
+
+  // Create product object
+  const newId = state.products.length > 0 
+    ? Math.max(...state.products.map(p => p.id)) + 1 
+    : 1;
+
+  // Decide image string (either emoji or uploaded base64 data URL)
+  const finalImage = state.uploadedImageBase64 ? state.uploadedImageBase64 : state.tempSelectedEmoji;
+
+  const newProduct = {
+    id: newId,
+    name: name,
+    category: category,
+    price: price,
+    stock: stock,
+    image: finalImage,
+    description: desc
+  };
+
+  state.products.push(newProduct);
+  saveProductsToStorage();
+
+  const dict = TRANSLATIONS[state.language];
+  showToast(dict.toastProductCreated.replace("{name}", name));
+
+  // Close and refresh
+  document.getElementById("addProductModal").classList.remove("active");
+  renderAdminPanel();
+}
+
+/* ============================================================
+   TOAST FEEDBACK
+============================================================ */
+function showToast(message, isDanger = false) {
+  const container = document.getElementById("toastContainer");
+  
+  const toast = document.createElement("div");
+  toast.className = isDanger ? "toast toast-danger" : "toast";
+  toast.innerHTML = `
+    <span>${isDanger ? "⚠️" : "🔔"}</span>
+    <span>${message}</span>
+  `;
+  
+  container.appendChild(toast);
+  
+  // Slide out after 3 seconds
+  setTimeout(() => {
+    toast.style.animation = "slideInLeft 0.3s ease reverse forwards";
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }, 2700);
+}
+
+/* ============================================================
+   ADMIN PORTAL LOGIN MODAL HANDLERS
+============================================================ */
+function openAdminLoginModal() {
+  document.getElementById("adminLoginModal").classList.add("active");
+  document.getElementById("adminLoginForm").reset();
+}
+
+function closeAdminLoginModal(e) {
+  if (!e || e.target.classList.contains("modal-overlay")) {
+    document.getElementById("adminLoginModal").classList.remove("active");
+  }
+}
+
+function handleAdminLoginSubmit(e) {
+  e.preventDefault();
+  
+  const phone = document.getElementById("adminPhoneInput").value.trim();
+  const password = document.getElementById("adminPassInput").value.trim();
+  const dict = TRANSLATIONS[state.language];
+
+  // Credentials check
+  if (phone === "9391595381" && password === "loki@2006") {
+    state.role = "admin";
+    localStorage.setItem("hkgn_role", "admin");
+    state.checkoutActive = false;
+    
+    // Close modal
+    document.getElementById("adminLoginModal").classList.remove("active");
+    
+    showToast(dict.toastAdminLoginSuccess);
+    renderApp();
+  } else {
+    showToast(dict.toastAdminLoginFail, true);
+  }
+}
