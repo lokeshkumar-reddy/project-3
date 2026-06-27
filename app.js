@@ -384,7 +384,7 @@ function loadStateFromStorage() {
 
   // Settings
   state.language = localStorage.getItem("hkgn_lang") || "en";
-  state.role = localStorage.getItem("hkgn_role") || "user";
+  state.role = "user"; // Always default to User Portal on startup
   state.theme = localStorage.getItem("hkgn_theme") || "dark";
 }
 
@@ -452,7 +452,7 @@ function toggleRole() {
   if (state.role === "admin") {
     // Log out admin
     state.role = "user";
-    localStorage.setItem("hkgn_role", "user");
+    localStorage.removeItem("hkgn_role"); // Clean any old persistent role
     state.checkoutActive = false;
     showToast(dict.toastAdminLogout);
     renderApp();
@@ -1548,7 +1548,7 @@ function handleAdminLoginSubmit(e) {
   // Credentials check
   if (phone === "9391595381" && password === "loki@2006") {
     state.role = "admin";
-    localStorage.setItem("hkgn_role", "admin");
+    localStorage.removeItem("hkgn_role"); // Never persist admin role across sessions
     state.checkoutActive = false;
     
     // Close modal
