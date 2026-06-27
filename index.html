@@ -186,36 +186,16 @@
 
         <!-- Payment selector -->
         <div class="glass-card checkout-form-section">
-          <h3 class="checkout-title"><span id="chkTitleStep2">2</span> <span id="chkHeadingPay">Choose Payment Mode</span></h3>
+          <h3 class="checkout-title"><span id="chkTitleStep2">2</span> <span id="chkHeadingPay">Payment Mode</span></h3>
           
-          <div class="payment-modes">
-            <div class="payment-btn active" id="payModeCod" onclick="setPaymentMode('COD')">
+          <div class="payment-modes" style="grid-template-columns: 1fr;">
+            <div class="payment-btn active" id="payModeCod" style="cursor: default; pointer-events: none;">
               <span class="payment-btn-icon">💵</span>
               <span id="payLabelCod">Cash on Delivery</span>
             </div>
-            <div class="payment-btn" id="payModePhonepe" onclick="setPaymentMode('PhonePe')">
-              <span class="payment-btn-icon">📱</span>
-              <span>PhonePe</span>
-            </div>
-            <div class="payment-btn" id="payModeGpay" onclick="setPaymentMode('GooglePay')">
-              <span class="payment-btn-icon">⚡</span>
-              <span>GooglePay</span>
-            </div>
-            <div class="payment-btn" id="payModePaytm" onclick="setPaymentMode('Paytm')">
-              <span class="payment-btn-icon">👛</span>
-              <span>Paytm</span>
-            </div>
           </div>
-
-          <!-- Non-editable payment interface -->
-          <div class="payment-app-info" id="paymentAppBlock">
-            <h5 id="payDetailsTitle">UPI Application Finalization</h5>
-            <p id="payDetailsDesc">Securely checkout using digital UPI. The total bill amount is automatically fetched and locked. You do not need to enter or edit the amount.</p>
-            <div class="form-group">
-              <label id="lblAmountLock">Locked Payment Amount (Non-editable)</label>
-              <div class="non-editable-amount" id="lockedAmountDisplay">₹0.00</div>
-            </div>
-          </div>
+          <!-- Hidden placeholder to prevent JS errors on lockedAmountDisplay -->
+          <div id="lockedAmountDisplay" style="display:none;">₹0.00</div>
         </div>
       </div>
 
@@ -270,6 +250,7 @@
     <div class="admin-tabs">
       <button class="admin-tab-btn active" id="tabCatalog" onclick="switchAdminTab('catalog')">Active Catalog</button>
       <button class="admin-tab-btn" id="tabRecycle" onclick="switchAdminTab('recycle')">Deleted Products Bin</button>
+      <button class="admin-tab-btn" id="tabOrders" onclick="switchAdminTab('orders')">Orders List</button>
     </div>
 
     <!-- Admin Active Catalog Tab -->
@@ -300,6 +281,17 @@
       
       <div class="recycle-bin-grid" id="adminRecycleBinGrid">
         <!-- Re-addable product cards injected here -->
+      </div>
+    </div>
+
+    <!-- Admin Orders Tab -->
+    <div id="adminTabOrdersContent" class="glass-card" style="padding: 24px; display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+        <h3 id="ordersTitle" style="font-size: 1.1rem; margin-bottom: 0; color: var(--primary-color);">Customer Bookings / Orders</h3>
+        <button class="btn-primary btn-sm" onclick="exportOrdersToExcel()" id="btnExportOrders" style="display:flex; align-items:center; gap:6px;">📥 Export to Excel</button>
+      </div>
+      <div id="adminOrdersContainer">
+        <!-- Injected by JS -->
       </div>
     </div>
   </main>
@@ -420,9 +412,12 @@
       <h3 class="modal-title" id="restoreModalTitle">Restore Product</h3>
       <p class="modal-desc" id="restoreModalDesc">Do you want to add this product again to the catalog?</p>
       
-      <div class="modal-actions">
+      <div class="modal-actions" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:flex-end;">
         <button class="btn-secondary" onclick="closeRestoreModal(false)">
           <span id="restoreModalCancel">No</span>
+        </button>
+        <button class="btn-danger" onclick="permanentlyDeleteProductFromBin()">
+          <span id="restoreModalDeletePerm">Delete Permanently</span>
         </button>
         <button class="btn-accent" onclick="closeRestoreModal(true)">
           <span id="restoreModalConfirm">Yes, Add This Product</span>

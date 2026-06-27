@@ -97,6 +97,8 @@ const TRANSLATIONS = {
     toastUpdatedStock: "Stock updated for {name} to {stock}!",
     toastDeleted: "Moved {name} to Deleted Products Bin.",
     toastRestored: "Restored {name} back to the catalog!",
+    toastPermanentDelete: "{name} has been permanently deleted from database.",
+    restoreModalDeletePerm: "Delete Permanently",
     toastEnterDetails: "Please fill in all customer details.",
     toastValidPhone: "Please enter a valid 10-digit mobile number.",
     toastEmptyCart: "Your shopping bag is empty.",
@@ -110,7 +112,24 @@ const TRANSLATIONS = {
     btnAdminLoginSubmit: "Login",
     toastAdminLoginSuccess: "Admin logged in successfully!",
     toastAdminLoginFail: "Invalid admin credentials! Please try again.",
-    toastAdminLogout: "Logged out from Admin portal."
+    toastAdminLogout: "Logged out from Admin portal.",
+    tabOrders: "Orders List",
+    ordersTitle: "Customer Bookings / Orders",
+    statusPending: "Pending",
+    statusCompleted: "Completed",
+    btnMarkCompleted: "Mark Completed",
+    btnMarkPending: "Mark Pending",
+    btnDeleteOrder: "Delete Order",
+    thOrderNum: "Order #",
+    thCustDetails: "Customer Details",
+    thOrderItems: "Items Ordered",
+    thOrderTotal: "Total Price",
+    thOrderStatus: "Status",
+    thOrderAction: "Actions",
+    toastOrderDeleted: "Order #{id} has been deleted.",
+    toastOrderStatusChanged: "Order #{id} status changed to {status}.",
+    emptyOrders: "No orders have been placed yet.",
+    btnExportOrders: "📥 Export to Excel"
   },
   te: {
     logoSub: "పురుగు మందులు, ఎరువులు మరియు విత్తనాలు",
@@ -207,6 +226,8 @@ const TRANSLATIONS = {
     toastUpdatedStock: "{name} స్టాక్ స్థాయి {stock} కి నవీకరించబడింది!",
     toastDeleted: "{name} తొలగించిన ఉత్పత్తుల సంచికి తరలించబడింది.",
     toastRestored: "{name} విజయవంతంగా దుకాణంలోకి పునరుద్ధరించబడింది!",
+    toastPermanentDelete: "{name} డేటాబేస్ నుండి శాశ్వతంగా తొలగించబడింది.",
+    restoreModalDeletePerm: "శాశ్వతంగా తొలగించు",
     toastEnterDetails: "దయచేసి కస్టమర్ వివరాలన్నీ నమోదు చేయండి.",
     toastValidPhone: "దయచేసి సరైన 10 అంకెల మొబైల్ సంఖ్యను నమోదు చేయండి.",
     toastEmptyCart: "మీ షాపింగ్ సంచి ఖాళీగా ఉంది.",
@@ -220,7 +241,24 @@ const TRANSLATIONS = {
     btnAdminLoginSubmit: "లాగిన్",
     toastAdminLoginSuccess: "అడ్మిన్ లాగిన్ విజయవంతమైంది!",
     toastAdminLoginFail: "తప్పుడు అడ్మిన్ వివరాలు! దయచేసి మళ్లీ ప్రయత్నించండి.",
-    toastAdminLogout: "అడ్మిన్ పోర్టల్ నుండి విజయవంతంగా నిష్క్రమించారు."
+    toastAdminLogout: "అడ్మిన్ పోర్టల్ నుండి విజయవంతంగా నిష్క్రమించారు.",
+    tabOrders: "ఆర్డర్ల జాబితా",
+    ordersTitle: "వినియోగదారుల బుకింగ్‌లు / ఆర్డర్లు",
+    statusPending: "పెండింగ్",
+    statusCompleted: "పూర్తయింది",
+    btnMarkCompleted: "పూర్తయినట్లు మార్క్ చేయి",
+    btnMarkPending: "పెండింగ్‌లో పెట్టండి",
+    btnDeleteOrder: "తొలగించు",
+    thOrderNum: "ఆర్డర్ #",
+    thCustDetails: "కస్టమర్ వివరాలు",
+    thOrderItems: "ఉత్పత్తుల వివరాలు",
+    thOrderTotal: "మొత్తం ధర",
+    thOrderStatus: "స్థితి",
+    thOrderAction: "చర్యలు",
+    toastOrderDeleted: "ఆర్డర్ #{id} తొలగించబడింది.",
+    toastOrderStatusChanged: "ఆర్డర్ #{id} స్థితి {status} కి మార్చబడింది.",
+    emptyOrders: "ఇంకా ఎటువంటి ఆర్డర్లు రాలేదు.",
+    btnExportOrders: "📥 ఎక్సెల్‌కు ఎగుమతి చేయి"
   }
 };
 
@@ -295,7 +333,8 @@ let state = {
   activeAdminTab: "catalog",
   tempSelectedEmoji: "🌾",
   uploadedImageBase64: null,
-  restoreTargetProduct: null
+  restoreTargetProduct: null,
+  orders: []
 };
 
 /* ============================================================
@@ -326,6 +365,15 @@ function loadStateFromStorage() {
     localStorage.setItem("hkgn_deleted_products", JSON.stringify([]));
   }
 
+  // Orders List
+  const savedOrders = localStorage.getItem("hkgn_orders");
+  if (savedOrders) {
+    state.orders = JSON.parse(savedOrders);
+  } else {
+    state.orders = [];
+    localStorage.setItem("hkgn_orders", JSON.stringify([]));
+  }
+
   // Cart
   const savedCart = localStorage.getItem("hkgn_cart");
   if (savedCart) {
@@ -347,6 +395,11 @@ function saveProductsToStorage() {
 function saveDeletedProductsToStorage() {
   localStorage.setItem("hkgn_deleted_products", JSON.stringify(state.deletedProducts));
 }
+
+function saveOrdersToStorage() {
+  localStorage.setItem("hkgn_orders", JSON.stringify(state.orders));
+}
+
 
 function saveCartToStorage() {
   localStorage.setItem("hkgn_cart", JSON.stringify(state.cart));
@@ -553,6 +606,7 @@ function renderTranslations() {
   document.getElementById("restoreModalDesc").textContent = dict.restoreModalDesc;
   document.getElementById("restoreModalCancel").textContent = dict.restoreModalCancel;
   document.getElementById("restoreModalConfirm").textContent = dict.restoreModalConfirm;
+  document.getElementById("restoreModalDeletePerm").textContent = dict.restoreModalDeletePerm;
 
   // Admin Login modal
   document.getElementById("adminLoginTitle").textContent = dict.adminLoginTitle;
@@ -561,6 +615,11 @@ function renderTranslations() {
   document.getElementById("lblAdminPass").textContent = dict.lblAdminPass;
   document.getElementById("btnAdminLoginCancel").textContent = dict.btnAdminLoginCancel;
   document.getElementById("btnAdminLoginSubmit").textContent = dict.btnAdminLoginSubmit;
+
+  // Admin Orders tab
+  document.getElementById("tabOrders").textContent = dict.tabOrders;
+  document.getElementById("ordersTitle").textContent = dict.ordersTitle;
+  document.getElementById("btnExportOrders").textContent = dict.btnExportOrders;
 }
 
 
@@ -847,21 +906,7 @@ function showCatalogView() {
 }
 
 function setPaymentMode(mode) {
-  state.selectedPaymentMode = mode;
-  
-  // Highlight chosen button
-  document.getElementById("payModeCod").classList.toggle("active", mode === "COD");
-  document.getElementById("payModePhonepe").classList.toggle("active", mode === "PhonePe");
-  document.getElementById("payModeGpay").classList.toggle("active", mode === "GooglePay");
-  document.getElementById("payModePaytm").classList.toggle("active", mode === "Paytm");
-
-  // Show/Hide Locked UPI App block
-  const upiBlock = document.getElementById("paymentAppBlock");
-  if (mode === "COD") {
-    upiBlock.classList.remove("active");
-  } else {
-    upiBlock.classList.add("active");
-  }
+  state.selectedPaymentMode = "COD";
 }
 
 function renderCheckoutView() {
@@ -904,6 +949,25 @@ function renderCheckoutView() {
   lockedDisplay.textContent = `₹${subtotal}`;
 }
 
+function isValidIndianMobile(phone) {
+  const cleanPhone = phone.replace(/[^0-9]/g, "");
+  
+  // Must be exactly 10 digits
+  if (cleanPhone.length !== 10) return false;
+  
+  // Must start with 6, 7, 8, or 9 (standard Indian mobile numbers)
+  if (!/^[6-9]/.test(cleanPhone)) return false;
+  
+  // Block all-same digits (e.g., 9999999999, 0000000000)
+  if (/^(\d)\1{9}$/.test(cleanPhone)) return false;
+  
+  // Block common fake sequences
+  const fakeSequences = ["9876543210", "8765432109", "7654321098", "6789012345", "1234567890", "0123456789"];
+  if (fakeSequences.includes(cleanPhone)) return false;
+  
+  return true;
+}
+
 function submitOrder() {
   const name = document.getElementById("custName").value.trim();
   const mobile = document.getElementById("custMobile").value.trim();
@@ -915,9 +979,8 @@ function submitOrder() {
     return;
   }
 
-  // Validate 10 digit phone number
-  const cleanPhone = mobile.replace(/[^0-9]/g, "");
-  if (cleanPhone.length < 10) {
+  // Validate 10 digit real mobile number
+  if (!isValidIndianMobile(mobile)) {
     showToast(dict.toastValidPhone, true);
     return;
   }
@@ -969,6 +1032,28 @@ _Order placed via HKGN Store Web Application_`;
     }
   });
 
+  // Save Order to local database
+  const newOrderNum = state.orders.length > 0 ? Math.max(...state.orders.map(o => o.orderNum || 1000)) + 1 : 1001;
+  const newOrder = {
+    id: Date.now(),
+    orderNum: newOrderNum,
+    customerName: name,
+    customerMobile: mobile,
+    customerAddress: address,
+    paymentMode: "COD",
+    items: state.cart.map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      qty: item.qty
+    })),
+    totalAmount: total,
+    date: new Date().toLocaleString(state.language === "en" ? "en-US" : "te-IN"),
+    status: "Pending"
+  };
+  state.orders.push(newOrder);
+  saveOrdersToStorage();
+
   // Reset cart
   state.cart = [];
   saveCartToStorage();
@@ -989,14 +1074,17 @@ function switchAdminTab(tab) {
   
   document.getElementById("tabCatalog").classList.toggle("active", tab === "catalog");
   document.getElementById("tabRecycle").classList.toggle("active", tab === "recycle");
+  document.getElementById("tabOrders").classList.toggle("active", tab === "orders");
 
   document.getElementById("adminTabCatalogContent").style.display = tab === "catalog" ? "block" : "none";
   document.getElementById("adminTabRecycleContent").style.display = tab === "recycle" ? "block" : "none";
+  document.getElementById("adminTabOrdersContent").style.display = tab === "orders" ? "block" : "none";
 
   renderAdminPanel();
 }
 
 function renderAdminPanel() {
+  const dict = TRANSLATIONS[state.language];
   if (state.activeAdminTab === "catalog") {
     const tableBody = document.getElementById("adminCatalogTableBody");
     tableBody.innerHTML = "";
@@ -1009,28 +1097,28 @@ function renderAdminPanel() {
 
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>
+        <td data-label="${dict.thImage || 'Image'}">
           <div class="admin-prod-thumb">
             ${imageTag}
           </div>
         </td>
-        <td style="font-weight:600;">${p.name}</td>
-        <td><span class="badge badge-primary">${p.category}</span></td>
-        <td style="font-weight:700; color:var(--accent-color);">₹${p.price}</td>
-        <td>
+        <td data-label="${dict.thName || 'Name'}" style="font-weight:600;">${p.name}</td>
+        <td data-label="${dict.thCategory || 'Category'}"><span class="badge badge-primary">${p.category}</span></td>
+        <td data-label="${dict.thPrice || 'Price'}" style="font-weight:700; color:var(--accent-color);">₹${p.price}</td>
+        <td data-label="${dict.thStock || 'Stock Level'}">
           <div class="stock-control">
             <span class="stock-btn" onclick="adjustAdminStock(${p.id}, -1)">-</span>
             <input type="number" class="stock-input" id="stockIn-${p.id}" value="${p.stock}" min="0" onchange="saveAdminStockChange(${p.id}, this.value)" />
             <span class="stock-btn" onclick="adjustAdminStock(${p.id}, 1)">+</span>
           </div>
         </td>
-        <td>
+        <td data-label="${dict.thActions || 'Actions'}">
           <button class="btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑️ Delete</button>
         </td>
       `;
       tableBody.appendChild(row);
     });
-  } else {
+  } else if (state.activeAdminTab === "recycle") {
     // Recycle Bin
     const recycleGrid = document.getElementById("adminRecycleBinGrid");
     recycleGrid.innerHTML = "";
@@ -1066,8 +1154,163 @@ function renderAdminPanel() {
       `;
       recycleGrid.appendChild(card);
     });
+  } else if (state.activeAdminTab === "orders") {
+    renderAdminOrders();
   }
 }
+
+/* ============================================================
+   ADMIN ORDERS LIST PANEL RENDERING
+============================================================ */
+function renderAdminOrders() {
+  const container = document.getElementById("adminOrdersContainer");
+  const dict = TRANSLATIONS[state.language];
+
+  if (!state.orders || state.orders.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding: 40px; color:var(--text-secondary);">
+        <span style="font-size: 3rem;">📋</span>
+        <p style="margin-top: 10px;">${dict.emptyOrders}</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Reverse sort by ID so newest orders show up first
+  const sortedOrders = [...state.orders].sort((a, b) => b.id - a.id);
+
+  container.innerHTML = `<div class="orders-list-grid"></div>`;
+  const grid = container.querySelector(".orders-list-grid");
+
+  sortedOrders.forEach(order => {
+    // Generate items table HTML
+    let itemsRowsHtml = "";
+    order.items.forEach(item => {
+      itemsRowsHtml += `
+        <tr>
+          <td style="font-weight: 500;">${item.name}</td>
+          <td style="text-align: center;">x${item.qty}</td>
+          <td style="text-align: right;">₹${item.price}</td>
+          <td style="text-align: right; font-weight: 600;">₹${item.price * item.qty}</td>
+        </tr>
+      `;
+    });
+
+    const isPending = order.status === "Pending";
+    const statusText = isPending ? dict.statusPending : dict.statusCompleted;
+    const statusClass = isPending ? "pending" : "completed";
+    const actionBtnText = isPending ? dict.btnMarkCompleted : dict.btnMarkPending;
+    
+    const card = document.createElement("div");
+    card.className = "order-card glass-card";
+    card.innerHTML = `
+      <div class="order-card-header">
+        <span class="order-number">Order #${order.orderNum}</span>
+        <span class="order-date">${order.date}</span>
+        <span class="order-status ${statusClass}">${statusText}</span>
+      </div>
+      <div class="order-card-body">
+        <!-- Customer info -->
+        <div class="order-info-section">
+          <h4>${dict.thCustDetails}</h4>
+          <p><strong>👤 Name:</strong> ${order.customerName}</p>
+          <p><strong>📞 Phone:</strong> ${order.customerMobile}</p>
+          <p><strong>📍 Address:</strong> ${order.customerAddress}</p>
+        </div>
+        <!-- Order items table -->
+        <div class="order-info-section">
+          <h4>${dict.thOrderItems}</h4>
+          <table class="order-items-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th style="text-align: center;">Qty</th>
+                <th style="text-align: right;">Price</th>
+                <th style="text-align: right;">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsRowsHtml}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="order-card-footer">
+        <div class="order-total">${dict.thOrderTotal}: ₹${order.totalAmount}</div>
+        <div class="order-actions">
+          <button class="btn-secondary btn-sm" onclick="toggleOrderStatus(${order.id})">${actionBtnText}</button>
+          <button class="btn-danger btn-sm" onclick="deleteOrder(${order.id})">🗑️ ${dict.btnDeleteOrder}</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function toggleOrderStatus(orderId) {
+  const order = state.orders.find(o => o.id === orderId);
+  if (!order) return;
+
+  order.status = order.status === "Pending" ? "Completed" : "Pending";
+  saveOrdersToStorage();
+
+  const dict = TRANSLATIONS[state.language];
+  const translatedStatus = order.status === "Pending" ? dict.statusPending : dict.statusCompleted;
+  showToast(dict.toastOrderStatusChanged.replace("{id}", order.orderNum).replace("{status}", translatedStatus));
+
+  renderAdminPanel();
+}
+
+function deleteOrder(orderId) {
+  const order = state.orders.find(o => o.id === orderId);
+  if (!order) return;
+
+  state.orders = state.orders.filter(o => o.id !== orderId);
+  saveOrdersToStorage();
+
+  const dict = TRANSLATIONS[state.language];
+  showToast(dict.toastOrderDeleted.replace("{id}", order.orderNum));
+
+  renderAdminPanel();
+}
+
+function exportOrdersToExcel() {
+  if (!state.orders || state.orders.length === 0) {
+    const dict = TRANSLATIONS[state.language];
+    showToast(state.language === "en" ? "No orders available to export." : "ఎగుమతి చేయడానికి ఎటువంటి ఆర్డర్లు లేవు.", true);
+    return;
+  }
+
+  // Column headers
+  let csvContent = "Order Number,Date,Customer Name,Mobile Number,Delivery Address,Items Ordered,Total Amount (INR),Status\n";
+
+  state.orders.forEach(order => {
+    const itemsDescription = order.items.map(item => `${item.qty}x ${item.name}`).join(" | ");
+    
+    // Clean strings of commas or quotes to prevent CSV parsing issues
+    const cleanName = order.customerName.replace(/"/g, '""');
+    const cleanPhone = order.customerMobile.replace(/"/g, '""');
+    const cleanAddress = order.customerAddress.replace(/"/g, '""').replace(/\n/g, " ");
+    const cleanItems = itemsDescription.replace(/"/g, '""');
+    const cleanDate = order.date.replace(/"/g, '""');
+
+    // Add row (wrap strings in double quotes)
+    csvContent += `"${order.orderNum}","${cleanDate}","${cleanName}","${cleanPhone}","${cleanAddress}","${cleanItems}","${order.totalAmount}","${order.status}"\n`;
+  });
+
+  // Create a blob with UTF-8 BOM so Excel opens Telugu/Special characters correctly
+  const BOM = "\uFEFF";
+  const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `HKGN_Orders_${Date.now()}.csv`);
+  link.style.visibility = "hidden";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 
 // Daily stock updates in Admin Mode
 function adjustAdminStock(prodId, change) {
@@ -1144,6 +1387,24 @@ function closeRestoreModal(confirm) {
 
     const dict = TRANSLATIONS[state.language];
     showToast(dict.toastRestored.replace("{name}", p.name));
+  }
+
+  state.restoreTargetProduct = null;
+  renderAdminPanel();
+}
+
+function permanentlyDeleteProductFromBin() {
+  const modal = document.getElementById("confirmRestoreModal");
+  modal.classList.remove("active");
+
+  const p = state.restoreTargetProduct;
+  if (p) {
+    // Remove from deleted list permanently
+    state.deletedProducts = state.deletedProducts.filter(item => item.id !== p.id);
+    saveDeletedProductsToStorage();
+
+    const dict = TRANSLATIONS[state.language];
+    showToast(dict.toastPermanentDelete.replace("{name}", p.name));
   }
 
   state.restoreTargetProduct = null;
