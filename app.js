@@ -414,29 +414,30 @@ function saveCartToStorage() {
 }
 
 /* ============================================================
-   CLOUD DATABASE CONFIGURATION & METHODS
+   DATABASE SYNC FUNCTIONS (LOCAL PYTHON API SERVER)
 ============================================================ */
-const CLOUD_DB_KEY = "m3kfzzdf";
 
 function syncProductsFromCloud() {
-  const url = `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_products`;
+  const url = '/api/products';
   fetch(url)
     .then(res => {
       if (!res.ok) throw new Error("Network response was not ok");
       return res.json();
     })
-    .then(rawString => {
-      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
+    .then(data => {
+      if (!data) return;
+      
+      // If server returned empty array on very first startup, seed it with defaults
+      if (Array.isArray(data) && data.length === 0) {
         syncProductsToCloud();
         return;
       }
+      
       try {
-        const data = JSON.parse(rawString);
         if (data && Array.isArray(data) && data.length > 0) {
           const currentStr = JSON.stringify(state.products);
           const newStr = JSON.stringify(data);
           
-          // Only update and re-render if the products database actually changed
           if (currentStr !== newStr) {
             state.products = data;
             localStorage.setItem("hkgn_products", newStr);
@@ -448,26 +449,22 @@ function syncProductsFromCloud() {
           }
         }
       } catch (e) {
-        console.error("Error parsing products from cloud:", e);
+        console.error("Error parsing products from server:", e);
       }
     })
-    .catch(err => console.log("Cloud products load failed:", err));
+    .catch(err => console.log("Local API server products load failed:", err));
 }
 
 function syncDeletedProductsFromCloud() {
-  const url = `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_deleted`;
+  const url = '/api/deleted';
   fetch(url)
     .then(res => {
       if (!res.ok) throw new Error("Network response was not ok");
       return res.json();
     })
-    .then(rawString => {
-      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
-        syncDeletedProductsToCloud();
-        return;
-      }
+    .then(data => {
+      if (!data) return;
       try {
-        const data = JSON.parse(rawString);
         if (data && Array.isArray(data)) {
           const currentStr = JSON.stringify(state.deletedProducts);
           const newStr = JSON.stringify(data);
@@ -481,26 +478,22 @@ function syncDeletedProductsFromCloud() {
           }
         }
       } catch (e) {
-        console.error("Error parsing deleted products from cloud:", e);
+        console.error("Error parsing deleted products from server:", e);
       }
     })
-    .catch(err => console.log("Cloud deleted load failed:", err));
+    .catch(err => console.log("Local API server deleted load failed:", err));
 }
 
 function syncOrdersFromCloud() {
-  const url = `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_orders`;
+  const url = '/api/orders';
   fetch(url)
     .then(res => {
       if (!res.ok) throw new Error("Network response was not ok");
       return res.json();
     })
-    .then(rawString => {
-      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
-        syncOrdersToCloud();
-        return;
-      }
+    .then(data => {
+      if (!data) return;
       try {
-        const data = JSON.parse(rawString);
         if (data && Array.isArray(data)) {
           const currentStr = JSON.stringify(state.orders);
           const newStr = JSON.stringify(data);
@@ -514,45 +507,45 @@ function syncOrdersFromCloud() {
           }
         }
       } catch (e) {
-        console.error("Error parsing orders from cloud:", e);
+        console.error("Error parsing orders from server:", e);
       }
     })
-    .catch(err => console.log("Cloud orders load failed:", err));
+    .catch(err => console.log("Local API server orders load failed:", err));
 }
 
 function syncProductsToCloud() {
   const payload = JSON.stringify(state.products);
-  const url = `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_products/${encodeURIComponent(payload)}`;
-  fetch(url, {
-    method: "POST",
-    headers: { "Content-Length": "0" }
+  fetch('/api/products', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: payload
   })
-  .catch(err => console.error("Error pushing products to cloud:", err));
+  .catch(err => console.error("Error pushing products to server:", err));
 }
 
 function syncDeletedProductsToCloud() {
   const payload = JSON.stringify(state.deletedProducts);
-  const url = `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_deleted/${encodeURIComponent(payload)}`;
-  fetch(url, {
-    method: "POST",
-    headers: { "Content-Length": "0" }
+  fetch('/api/deleted', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: payload
   })
-  .catch(err => console.error("Error pushing deleted products to cloud:", err));
+  .catch(err => console.error("Error pushing deleted products to server:", err));
 }
 
 function syncOrdersToCloud() {
   const payload = JSON.stringify(state.orders);
-  const url = `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_orders/${encodeURIComponent(payload)}`;
-  fetch(url, {
-    method: "POST",
-    headers: { "Content-Length": "0" }
+  fetch('/api/orders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: payload
   })
-  .catch(err => console.error("Error pushing orders to cloud:", err));
+  .catch(err => console.error("Error pushing orders to server:", err));
 }
 
-// Start background real-time polling every 4 seconds to sync modifications immediately
+// Start background real-time polling every 2 seconds for ultra-fast multi-device synchronization
 setInterval(() => {
-  // Avoid checking if client is actively typing inside search bars or admin stock fields to prevent cursor jumpiness
+  // Avoid checking if client is actively typing inside search bars or admin stock fields to prevent cursor jumping
   const isTyping = document.activeElement && 
     (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA");
   
@@ -561,7 +554,7 @@ setInterval(() => {
     syncDeletedProductsFromCloud();
     syncOrdersFromCloud();
   }
-}, 4000); // 4-second polling interval for real-time synchronization
+}, 2000); // Poll every 2 seconds for near-instant updates on all devices
 
 /* ============================================================
    THEMING
