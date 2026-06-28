@@ -344,6 +344,11 @@ document.addEventListener("DOMContentLoaded", () => {
   loadStateFromStorage();
   syncDOMTheme();
   renderApp();
+
+  // Async background sync with cloud database (keyvalue.immanuel.co)
+  syncProductsFromCloud();
+  syncDeletedProductsFromCloud();
+  syncOrdersFromCloud();
 });
 
 function loadStateFromStorage() {
@@ -390,19 +395,143 @@ function loadStateFromStorage() {
 
 function saveProductsToStorage() {
   localStorage.setItem("hkgn_products", JSON.stringify(state.products));
+  syncProductsToCloud();
 }
 
 function saveDeletedProductsToStorage() {
   localStorage.setItem("hkgn_deleted_products", JSON.stringify(state.deletedProducts));
+  syncDeletedProductsToCloud();
 }
 
 function saveOrdersToStorage() {
   localStorage.setItem("hkgn_orders", JSON.stringify(state.orders));
+  syncOrdersToCloud();
 }
 
 
 function saveCartToStorage() {
   localStorage.setItem("hkgn_cart", JSON.stringify(state.cart));
+}
+
+/* ============================================================
+   CLOUD DATABASE CONFIGURATION & METHODS
+============================================================ */
+const CLOUD_DB_KEY = "m3kfzzdf";
+
+function syncProductsFromCloud() {
+  const url = `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_products`;
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error("Network response was not ok");
+      return res.json();
+    })
+    .then(rawString => {
+      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
+        syncProductsToCloud();
+        return;
+      }
+      try {
+        const data = JSON.parse(rawString);
+        if (data && Array.isArray(data) && data.length > 0) {
+          state.products = data;
+          localStorage.setItem("hkgn_products", JSON.stringify(state.products));
+          if (state.role === "admin") {
+            renderAdminPanel();
+          } else {
+            renderProductsGrid();
+          }
+        }
+      } catch (e) {
+        console.error("Error parsing products from cloud:", e);
+      }
+    })
+    .catch(err => console.log("Cloud products load failed:", err));
+}
+
+function syncDeletedProductsFromCloud() {
+  const url = `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_deleted`;
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error("Network response was not ok");
+      return res.json();
+    })
+    .then(rawString => {
+      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
+        syncDeletedProductsToCloud();
+        return;
+      }
+      try {
+        const data = JSON.parse(rawString);
+        if (data && Array.isArray(data)) {
+          state.deletedProducts = data;
+          localStorage.setItem("hkgn_deleted_products", JSON.stringify(state.deletedProducts));
+          if (state.role === "admin" && state.activeAdminTab === "recycle") {
+            renderAdminPanel();
+          }
+        }
+      } catch (e) {
+        console.error("Error parsing deleted products from cloud:", e);
+      }
+    })
+    .catch(err => console.log("Cloud deleted load failed:", err));
+}
+
+function syncOrdersFromCloud() {
+  const url = `https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_orders`;
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error("Network response was not ok");
+      return res.json();
+    })
+    .then(rawString => {
+      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
+        syncOrdersToCloud();
+        return;
+      }
+      try {
+        const data = JSON.parse(rawString);
+        if (data && Array.isArray(data)) {
+          state.orders = data;
+          localStorage.setItem("hkgn_orders", JSON.stringify(state.orders));
+          if (state.role === "admin" && state.activeAdminTab === "orders") {
+            renderAdminPanel();
+          }
+        }
+      } catch (e) {
+        console.error("Error parsing orders from cloud:", e);
+      }
+    })
+    .catch(err => console.log("Cloud orders load failed:", err));
+}
+
+function syncProductsToCloud() {
+  const payload = JSON.stringify(state.products);
+  const url = `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_products/${encodeURIComponent(payload)}`;
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Length": "0" }
+  })
+  .catch(err => console.error("Error pushing products to cloud:", err));
+}
+
+function syncDeletedProductsToCloud() {
+  const payload = JSON.stringify(state.deletedProducts);
+  const url = `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_deleted/${encodeURIComponent(payload)}`;
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Length": "0" }
+  })
+  .catch(err => console.error("Error pushing deleted products to cloud:", err));
+}
+
+function syncOrdersToCloud() {
+  const payload = JSON.stringify(state.orders);
+  const url = `https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_orders/${encodeURIComponent(payload)}`;
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Length": "0" }
+  })
+  .catch(err => console.error("Error pushing orders to cloud:", err));
 }
 
 /* ============================================================
@@ -990,6 +1119,9 @@ function submitOrder() {
     return;
   }
 
+  // Calculate new order number first
+  const newOrderNum = state.orders.length > 0 ? Math.max(...state.orders.map(o => o.orderNum || 1000)) + 1 : 1001;
+
   // Calculate total
   let total = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
@@ -999,9 +1131,9 @@ function submitOrder() {
     itemsText += `\n- ${item.qty}x ${item.name} (₹${item.price} each) - ₹${item.price * item.qty}`;
   });
 
-  // Construct message template
+  // Construct message template with the specific Order Number
   const textMessage = 
-`🔔 *NEW BOOKING ORDER - HKGN AGENCIES* 🌾
+`🔔 *NEW BOOKING ORDER #${newOrderNum} - HKGN AGENCIES* 🌾
 ---------------------------------------------
 👤 *Customer Name:* ${name}
 📱 *Contact Number:* ${mobile}
@@ -1033,7 +1165,6 @@ _Order placed via HKGN Store Web Application_`;
   });
 
   // Save Order to local database
-  const newOrderNum = state.orders.length > 0 ? Math.max(...state.orders.map(o => o.orderNum || 1000)) + 1 : 1001;
   const newOrder = {
     id: Date.now(),
     orderNum: newOrderNum,
