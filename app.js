@@ -433,12 +433,18 @@ function syncProductsFromCloud() {
       try {
         const data = JSON.parse(rawString);
         if (data && Array.isArray(data) && data.length > 0) {
-          state.products = data;
-          localStorage.setItem("hkgn_products", JSON.stringify(state.products));
-          if (state.role === "admin") {
-            renderAdminPanel();
-          } else {
-            renderProductsGrid();
+          const currentStr = JSON.stringify(state.products);
+          const newStr = JSON.stringify(data);
+          
+          // Only update and re-render if the products database actually changed
+          if (currentStr !== newStr) {
+            state.products = data;
+            localStorage.setItem("hkgn_products", newStr);
+            if (state.role === "admin") {
+              renderAdminPanel();
+            } else {
+              renderProductsGrid();
+            }
           }
         }
       } catch (e) {
@@ -463,10 +469,15 @@ function syncDeletedProductsFromCloud() {
       try {
         const data = JSON.parse(rawString);
         if (data && Array.isArray(data)) {
-          state.deletedProducts = data;
-          localStorage.setItem("hkgn_deleted_products", JSON.stringify(state.deletedProducts));
-          if (state.role === "admin" && state.activeAdminTab === "recycle") {
-            renderAdminPanel();
+          const currentStr = JSON.stringify(state.deletedProducts);
+          const newStr = JSON.stringify(data);
+          
+          if (currentStr !== newStr) {
+            state.deletedProducts = data;
+            localStorage.setItem("hkgn_deleted_products", newStr);
+            if (state.role === "admin" && state.activeAdminTab === "recycle") {
+              renderAdminPanel();
+            }
           }
         }
       } catch (e) {
@@ -491,10 +502,15 @@ function syncOrdersFromCloud() {
       try {
         const data = JSON.parse(rawString);
         if (data && Array.isArray(data)) {
-          state.orders = data;
-          localStorage.setItem("hkgn_orders", JSON.stringify(state.orders));
-          if (state.role === "admin" && state.activeAdminTab === "orders") {
-            renderAdminPanel();
+          const currentStr = JSON.stringify(state.orders);
+          const newStr = JSON.stringify(data);
+          
+          if (currentStr !== newStr) {
+            state.orders = data;
+            localStorage.setItem("hkgn_orders", newStr);
+            if (state.role === "admin" && state.activeAdminTab === "orders") {
+              renderAdminPanel();
+            }
           }
         }
       } catch (e) {
@@ -533,6 +549,19 @@ function syncOrdersToCloud() {
   })
   .catch(err => console.error("Error pushing orders to cloud:", err));
 }
+
+// Start background real-time polling every 4 seconds to sync modifications immediately
+setInterval(() => {
+  // Avoid checking if client is actively typing inside search bars or admin stock fields to prevent cursor jumpiness
+  const isTyping = document.activeElement && 
+    (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA");
+  
+  if (!isTyping) {
+    syncProductsFromCloud();
+    syncDeletedProductsFromCloud();
+    syncOrdersFromCloud();
+  }
+}, 4000); // 4-second polling interval for real-time synchronization
 
 /* ============================================================
    THEMING
