@@ -129,7 +129,14 @@ const TRANSLATIONS = {
     toastOrderDeleted: "Order #{id} has been deleted.",
     toastOrderStatusChanged: "Order #{id} status changed to {status}.",
     emptyOrders: "No orders have been placed yet.",
-    btnExportOrders: "📥 Export to Excel"
+    btnExportOrders: "📥 Export to Excel",
+    footerTagline: "Quality Pesticides, Fertilisers & Seeds in Punganur, India.",
+    footerCredits: "© 2026 HKGN Agencies. All Rights Reserved.",
+    shareTitle: "Share This Store:",
+    shareBtnStoreCopied: "Store link copied to clipboard!",
+    shareBtnWhatsappText: "WhatsApp",
+    shareBtnCopyText: "Copy Link",
+    shareBtnEmailText: "Email"
   },
   te: {
     logoSub: "పురుగు మందులు, ఎరువులు మరియు విత్తనాలు",
@@ -414,26 +421,26 @@ function saveCartToStorage() {
 }
 
 /* ============================================================
-   DATABASE SYNC FUNCTIONS (LOCAL PYTHON API SERVER)
+   DATABASE SYNC FUNCTIONS (GLOBAL CLOUD DATABASE VIA CORS PROXY)
 ============================================================ */
+const CLOUD_DB_KEY = "m3kfzzdf";
+const PROXY_PREFIX = "https://corsproxy.io/?";
 
 function syncProductsFromCloud() {
-  const url = '/api/products';
+  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_products`;
   fetch(url)
     .then(res => {
       if (!res.ok) throw new Error("Network response was not ok");
       return res.json();
     })
-    .then(data => {
-      if (!data) return;
-      
-      // If server returned empty array on very first startup, seed it with defaults
-      if (Array.isArray(data) && data.length === 0) {
+    .then(rawString => {
+      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
+        // Not initialized in cloud yet, upload local/default seed data
         syncProductsToCloud();
         return;
       }
-      
       try {
+        const data = JSON.parse(rawString);
         if (data && Array.isArray(data) && data.length > 0) {
           const currentStr = JSON.stringify(state.products);
           const newStr = JSON.stringify(data);
@@ -449,22 +456,26 @@ function syncProductsFromCloud() {
           }
         }
       } catch (e) {
-        console.error("Error parsing products from server:", e);
+        console.error("Error parsing products from cloud:", e);
       }
     })
-    .catch(err => console.log("Local API server products load failed:", err));
+    .catch(err => console.log("Cloud products load failed:", err));
 }
 
 function syncDeletedProductsFromCloud() {
-  const url = '/api/deleted';
+  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_deleted`;
   fetch(url)
     .then(res => {
       if (!res.ok) throw new Error("Network response was not ok");
       return res.json();
     })
-    .then(data => {
-      if (!data) return;
+    .then(rawString => {
+      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
+        syncDeletedProductsToCloud();
+        return;
+      }
       try {
+        const data = JSON.parse(rawString);
         if (data && Array.isArray(data)) {
           const currentStr = JSON.stringify(state.deletedProducts);
           const newStr = JSON.stringify(data);
@@ -478,22 +489,26 @@ function syncDeletedProductsFromCloud() {
           }
         }
       } catch (e) {
-        console.error("Error parsing deleted products from server:", e);
+        console.error("Error parsing deleted products from cloud:", e);
       }
     })
-    .catch(err => console.log("Local API server deleted load failed:", err));
+    .catch(err => console.log("Cloud deleted load failed:", err));
 }
 
 function syncOrdersFromCloud() {
-  const url = '/api/orders';
+  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_orders`;
   fetch(url)
     .then(res => {
       if (!res.ok) throw new Error("Network response was not ok");
       return res.json();
     })
-    .then(data => {
-      if (!data) return;
+    .then(rawString => {
+      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
+        syncOrdersToCloud();
+        return;
+      }
       try {
+        const data = JSON.parse(rawString);
         if (data && Array.isArray(data)) {
           const currentStr = JSON.stringify(state.orders);
           const newStr = JSON.stringify(data);
@@ -507,40 +522,40 @@ function syncOrdersFromCloud() {
           }
         }
       } catch (e) {
-        console.error("Error parsing orders from server:", e);
+        console.error("Error parsing orders from cloud:", e);
       }
     })
-    .catch(err => console.log("Local API server orders load failed:", err));
+    .catch(err => console.log("Cloud orders load failed:", err));
 }
 
 function syncProductsToCloud() {
   const payload = JSON.stringify(state.products);
-  fetch('/api/products', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: payload
+  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_products/${encodeURIComponent(payload)}`;
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Length": "0" }
   })
-  .catch(err => console.error("Error pushing products to server:", err));
+  .catch(err => console.error("Error pushing products to cloud:", err));
 }
 
 function syncDeletedProductsToCloud() {
   const payload = JSON.stringify(state.deletedProducts);
-  fetch('/api/deleted', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: payload
+  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_deleted/${encodeURIComponent(payload)}`;
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Length": "0" }
   })
-  .catch(err => console.error("Error pushing deleted products to server:", err));
+  .catch(err => console.error("Error pushing deleted products to cloud:", err));
 }
 
 function syncOrdersToCloud() {
   const payload = JSON.stringify(state.orders);
-  fetch('/api/orders', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: payload
+  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_orders/${encodeURIComponent(payload)}`;
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Length": "0" }
   })
-  .catch(err => console.error("Error pushing orders to server:", err));
+  .catch(err => console.error("Error pushing orders to cloud:", err));
 }
 
 // Start background real-time polling every 2 seconds for ultra-fast multi-device synchronization
@@ -771,6 +786,36 @@ function renderTranslations() {
   document.getElementById("tabOrders").textContent = dict.tabOrders;
   document.getElementById("ordersTitle").textContent = dict.ordersTitle;
   document.getElementById("btnExportOrders").textContent = dict.btnExportOrders;
+
+  // Footer & Share translations
+  document.getElementById("footerTagline").textContent = dict.footerTagline;
+  document.getElementById("footerCredits").textContent = dict.footerCredits;
+  document.getElementById("shareTitle").textContent = dict.shareTitle;
+  document.getElementById("shareBtnWhatsappText").textContent = dict.shareBtnWhatsappText;
+  document.getElementById("shareBtnCopyText").textContent = dict.shareBtnCopyText;
+  document.getElementById("shareBtnEmailText").textContent = dict.shareBtnEmailText;
+}
+
+function shareStore(platform) {
+  const storeUrl = window.location.origin + window.location.pathname;
+  const storeText = "Check out HKGN Agencies Store (Punganur) for quality pesticides, fertilisers, and seeds! Order directly on WhatsApp: ";
+  const dict = TRANSLATIONS[state.language];
+
+  if (platform === 'whatsapp') {
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(storeText + storeUrl)}`;
+    window.open(waUrl, '_blank');
+  } else if (platform === 'copy') {
+    navigator.clipboard.writeText(storeUrl)
+      .then(() => {
+        showToast(dict.shareBtnStoreCopied);
+      })
+      .catch(err => {
+        console.error("Failed to copy link:", err);
+      });
+  } else if (platform === 'email') {
+    const emailUrl = `mailto:?subject=${encodeURIComponent("HKGN Agencies Agricultural Store")}&body=${encodeURIComponent(storeText + storeUrl)}`;
+    window.open(emailUrl, '_blank');
+  }
 }
 
 

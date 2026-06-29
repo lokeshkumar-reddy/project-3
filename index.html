@@ -297,6 +297,34 @@
   </main>
 
   <!-- ============================================================
+       STORE FOOTER & SHARE BUTTONS
+  ============================================================ -->
+  <footer class="store-footer">
+    <div class="footer-container">
+      <div class="footer-info">
+        <span class="footer-logo">🌿 HKGN Agencies</span>
+        <p class="footer-tagline" id="footerTagline">Quality Pesticides, Fertilisers & Seeds in Punganur, India.</p>
+        <p class="footer-credits" id="footerCredits">© 2026 HKGN Agencies. All Rights Reserved.</p>
+      </div>
+      
+      <div class="footer-share">
+        <span class="share-title" id="shareTitle">Share This Store:</span>
+        <div class="share-buttons">
+          <button class="share-btn whatsapp" onclick="shareStore('whatsapp')" title="Share on WhatsApp">
+            <span>💬 <span id="shareBtnWhatsappText">WhatsApp</span></span>
+          </button>
+          <button class="share-btn link" onclick="shareStore('copy')" title="Copy Store Link">
+            <span>🔗 <span id="shareBtnCopyText">Copy Link</span></span>
+          </button>
+          <button class="share-btn email" onclick="shareStore('email')" title="Share via Email">
+            <span>✉️ <span id="shareBtnEmailText">Email</span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
        SHOPPING BAG SIDEBAR DRAWER (SLIDE OUT)
   ============================================================ -->
   <div class="cart-overlay" id="cartOverlay" onclick="toggleCartDrawer(false)"></div>

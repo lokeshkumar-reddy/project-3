@@ -95,8 +95,59 @@ class StoreAPIRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
 
 if __name__ == '__main__':
-    # Initialize databases if they don't exist
-    read_json_file('db_products.json', [])
+    SEED_PRODUCTS = [
+      {
+        "id": 1,
+        "name": "Urea Fertiliser (50kg Bag)",
+        "category": "fertilisers",
+        "price": 350,
+        "stock": 25,
+        "image": "🌾",
+        "description": "High-quality nitrogenous fertiliser essential for boosting leafy green crop growth and crop health."
+      },
+      {
+        "id": 2,
+        "name": "DAP Fertiliser (50kg Bag)",
+        "category": "fertilisers",
+        "price": 1350,
+        "stock": 18,
+        "image": "📦",
+        "description": "Diammonium Phosphate containing rich phosphate content for healthy root systems and early crop vigor."
+      },
+      {
+        "id": 3,
+        "name": "Organic Neem Oil Pesticide (1 Litre)",
+        "category": "pesticides",
+        "price": 280,
+        "stock": 45,
+        "image": "🧪",
+        "description": "Cold-pressed pure organic neem oil pesticide. Safe bio-control against aphids, whiteflies, and scale pests."
+      },
+      {
+        "id": 4,
+        "name": "Hybrid Tomato Seeds (100g Pack)",
+        "category": "seeds",
+        "price": 150,
+        "stock": 30,
+        "image": "🍅",
+        "description": "High germination rate hybrid tomato seeds, resistant to common wilt and leaf curl diseases."
+      },
+      {
+        "id": 5,
+        "name": "BT Cotton Seeds (450g Pack)",
+        "category": "seeds",
+        "price": 860,
+        "stock": 12,
+        "image": "🌱",
+        "description": "Premium BT cotton seeds providing resistance to bollworms, ensuring high cotton crop yield."
+      }
+    ]
+
+    # Initialize databases if they don't exist or are empty
+    products = read_json_file('db_products.json', [])
+    if not products:
+        write_json_file('db_products.json', SEED_PRODUCTS)
+        
     read_json_file('db_deleted.json', [])
     read_json_file('db_orders.json', [])
     
