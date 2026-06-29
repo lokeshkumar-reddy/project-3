@@ -136,7 +136,11 @@ const TRANSLATIONS = {
     shareBtnStoreCopied: "Store link copied to clipboard!",
     shareBtnWhatsappText: "WhatsApp",
     shareBtnCopyText: "Copy Link",
-    shareBtnEmailText: "Email"
+    shareBtnEmailText: "Email",
+    addProductModalTitleEdit: "Edit Product",
+    addProductModalDescEdit: "Modify the details of this product listing. All changes sync immediately to all customers.",
+    btnAddProdSubmitEdit: "Update Product",
+    toastProductUpdated: "Product {name} updated successfully!"
   },
   te: {
     logoSub: "పురుగు మందులు, ఎరువులు మరియు విత్తనాలు",
@@ -265,7 +269,18 @@ const TRANSLATIONS = {
     toastOrderDeleted: "ఆర్డర్ #{id} తొలగించబడింది.",
     toastOrderStatusChanged: "ఆర్డర్ #{id} స్థితి {status} కి మార్చబడింది.",
     emptyOrders: "ఇంకా ఎటువంటి ఆర్డర్లు రాలేదు.",
-    btnExportOrders: "📥 ఎక్సెల్‌కు ఎగుమతి చేయి"
+    btnExportOrders: "📥 ఎక్సెల్‌కు ఎగుమతి చేయి",
+    footerTagline: "పుంగనూరులో నాణ్యమైన పురుగుమందులు, ఎరువులు మరియు విత్తనాలు.",
+    footerCredits: "© 2026 హెచ్.కె.జి.ఎన్. ఏజెన్సీస్. సర్వ హక్కులూ ప్రత్యేకించబడినవి.",
+    shareTitle: "ఈ స్టోర్‌ను షేర్ చేయండి:",
+    shareBtnStoreCopied: "స్టోర్ లింక్ కాపీ చేయబడింది!",
+    shareBtnWhatsappText: "వాట్సాప్",
+    shareBtnCopyText: "లింక్ కాపీ చేయి",
+    shareBtnEmailText: "ఈమెయిల్",
+    addProductModalTitleEdit: "ఉత్పత్తిని సవరించు",
+    addProductModalDescEdit: "ఈ ఉత్పత్తి యొక్క వివరాలను మార్చండి. అన్ని మార్పులు కస్టమర్లందరికీ వెంటనే సమకాలీకరించబడతాయి.",
+    btnAddProdSubmitEdit: "ఉత్పత్తిని నవీకరించు",
+    toastProductUpdated: "ఉత్పత్తి {name} విజయవంతంగా నవీకరించబడింది!"
   }
 };
 
@@ -341,6 +356,7 @@ let state = {
   tempSelectedEmoji: "🌾",
   uploadedImageBase64: null,
   restoreTargetProduct: null,
+  editingProductId: null,
   orders: []
 };
 
@@ -352,10 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
   syncDOMTheme();
   renderApp();
 
-  // Async background sync with cloud database (keyvalue.immanuel.co)
-  syncProductsFromCloud();
-  syncDeletedProductsFromCloud();
-  syncOrdersFromCloud();
+  // Socket.io handles database initialization automatically on connection.
 });
 
 function loadStateFromStorage() {
@@ -421,155 +434,82 @@ function saveCartToStorage() {
 }
 
 /* ============================================================
-   DATABASE SYNC FUNCTIONS (GLOBAL CLOUD DATABASE VIA CORS PROXY)
+   DATABASE SYNC FUNCTIONS (REAL-TIME WEBSOCKETS VIA SOCKET.IO)
 ============================================================ */
-const CLOUD_DB_KEY = "m3kfzzdf";
-const PROXY_PREFIX = "https://corsproxy.io/?";
+// Establish socket connection to the current host
+const socket = io(window.location.origin);
 
-function syncProductsFromCloud() {
-  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_products`;
-  fetch(url)
-    .then(res => {
-      if (!res.ok) throw new Error("Network response was not ok");
-      return res.json();
-    })
-    .then(rawString => {
-      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
-        // Not initialized in cloud yet, upload local/default seed data
-        syncProductsToCloud();
-        return;
-      }
-      try {
-        const data = JSON.parse(rawString);
-        if (data && Array.isArray(data) && data.length > 0) {
-          const currentStr = JSON.stringify(state.products);
-          const newStr = JSON.stringify(data);
-          
-          if (currentStr !== newStr) {
-            state.products = data;
-            localStorage.setItem("hkgn_products", newStr);
-            if (state.role === "admin") {
-              renderAdminPanel();
-            } else {
-              renderProductsGrid();
-            }
-          }
-        }
-      } catch (e) {
-        console.error("Error parsing products from cloud:", e);
-      }
-    })
-    .catch(err => console.log("Cloud products load failed:", err));
-}
+// Connection status handler
+socket.on("connect", () => {
+  console.log("Connected to HKGN Agencies Real-time Sync Server");
+});
 
-function syncDeletedProductsFromCloud() {
-  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_deleted`;
-  fetch(url)
-    .then(res => {
-      if (!res.ok) throw new Error("Network response was not ok");
-      return res.json();
-    })
-    .then(rawString => {
-      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
-        syncDeletedProductsToCloud();
-        return;
-      }
-      try {
-        const data = JSON.parse(rawString);
-        if (data && Array.isArray(data)) {
-          const currentStr = JSON.stringify(state.deletedProducts);
-          const newStr = JSON.stringify(data);
-          
-          if (currentStr !== newStr) {
-            state.deletedProducts = data;
-            localStorage.setItem("hkgn_deleted_products", newStr);
-            if (state.role === "admin" && state.activeAdminTab === "recycle") {
-              renderAdminPanel();
-            }
-          }
-        }
-      } catch (e) {
-        console.error("Error parsing deleted products from cloud:", e);
-      }
-    })
-    .catch(err => console.log("Cloud deleted load failed:", err));
-}
+// Receive initial database dump on connect
+socket.on("init_data", (data) => {
+  console.log("Loaded initial database state:", data);
+  if (data.products) {
+    state.products = data.products;
+    localStorage.setItem("hkgn_products", JSON.stringify(data.products));
+  }
+  if (data.deleted) {
+    state.deletedProducts = data.deleted;
+    localStorage.setItem("hkgn_deleted_products", JSON.stringify(data.deleted));
+  }
+  if (data.orders) {
+    state.orders = data.orders;
+    localStorage.setItem("hkgn_orders", JSON.stringify(data.orders));
+  }
+  
+  // Render active view
+  if (state.role === "admin") {
+    renderAdminPanel();
+  } else {
+    renderProductsGrid();
+  }
+});
 
-function syncOrdersFromCloud() {
-  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/GetValue/${CLOUD_DB_KEY}/hkgn_orders`;
-  fetch(url)
-    .then(res => {
-      if (!res.ok) throw new Error("Network response was not ok");
-      return res.json();
-    })
-    .then(rawString => {
-      if (!rawString || rawString === "null" || rawString.includes("An error has occurred")) {
-        syncOrdersToCloud();
-        return;
-      }
-      try {
-        const data = JSON.parse(rawString);
-        if (data && Array.isArray(data)) {
-          const currentStr = JSON.stringify(state.orders);
-          const newStr = JSON.stringify(data);
-          
-          if (currentStr !== newStr) {
-            state.orders = data;
-            localStorage.setItem("hkgn_orders", newStr);
-            if (state.role === "admin" && state.activeAdminTab === "orders") {
-              renderAdminPanel();
-            }
-          }
-        }
-      } catch (e) {
-        console.error("Error parsing orders from cloud:", e);
-      }
-    })
-    .catch(err => console.log("Cloud orders load failed:", err));
-}
+// Listen for updates broadcast by other clients
+socket.on("products_updated", (data) => {
+  console.log("Products updated in real-time:", data);
+  state.products = data;
+  localStorage.setItem("hkgn_products", JSON.stringify(data));
+  if (state.role === "admin") {
+    renderAdminPanel();
+  } else {
+    renderProductsGrid();
+  }
+});
 
+socket.on("deleted_updated", (data) => {
+  console.log("Deleted bin updated in real-time:", data);
+  state.deletedProducts = data;
+  localStorage.setItem("hkgn_deleted_products", JSON.stringify(data));
+  if (state.role === "admin" && state.activeAdminTab === "recycle") {
+    renderAdminPanel();
+  }
+});
+
+socket.on("orders_updated", (data) => {
+  console.log("Orders database updated in real-time:", data);
+  state.orders = data;
+  localStorage.setItem("hkgn_orders", JSON.stringify(data));
+  if (state.role === "admin" && state.activeAdminTab === "orders") {
+    renderAdminPanel();
+  }
+});
+
+// Socket emit helpers
 function syncProductsToCloud() {
-  const payload = JSON.stringify(state.products);
-  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_products/${encodeURIComponent(payload)}`;
-  fetch(url, {
-    method: "POST",
-    headers: { "Content-Length": "0" }
-  })
-  .catch(err => console.error("Error pushing products to cloud:", err));
+  socket.emit("update_products", state.products);
 }
 
 function syncDeletedProductsToCloud() {
-  const payload = JSON.stringify(state.deletedProducts);
-  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_deleted/${encodeURIComponent(payload)}`;
-  fetch(url, {
-    method: "POST",
-    headers: { "Content-Length": "0" }
-  })
-  .catch(err => console.error("Error pushing deleted products to cloud:", err));
+  socket.emit("update_deleted", state.deletedProducts);
 }
 
 function syncOrdersToCloud() {
-  const payload = JSON.stringify(state.orders);
-  const url = `${PROXY_PREFIX}https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${CLOUD_DB_KEY}/hkgn_orders/${encodeURIComponent(payload)}`;
-  fetch(url, {
-    method: "POST",
-    headers: { "Content-Length": "0" }
-  })
-  .catch(err => console.error("Error pushing orders to cloud:", err));
+  socket.emit("update_orders", state.orders);
 }
-
-// Start background real-time polling every 2 seconds for ultra-fast multi-device synchronization
-setInterval(() => {
-  // Avoid checking if client is actively typing inside search bars or admin stock fields to prevent cursor jumping
-  const isTyping = document.activeElement && 
-    (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA");
-  
-  if (!isTyping) {
-    syncProductsFromCloud();
-    syncDeletedProductsFromCloud();
-    syncOrdersFromCloud();
-  }
-}, 2000); // Poll every 2 seconds for near-instant updates on all devices
 
 /* ============================================================
    THEMING
@@ -1311,7 +1251,10 @@ function renderAdminPanel() {
           </div>
         </td>
         <td data-label="${dict.thActions || 'Actions'}">
-          <button class="btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑️ Delete</button>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">
+            <button class="btn-accent btn-sm" onclick="openEditProductModal(${p.id})">✏️ Edit</button>
+            <button class="btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑️ Delete</button>
+          </div>
         </td>
       `;
       tableBody.appendChild(row);
@@ -1610,9 +1553,16 @@ function permanentlyDeleteProductFromBin() {
 }
 
 /* ============================================================
-   ADD NEW PRODUCT FORM ACTIONS
+   ADD / EDIT PRODUCT FORM ACTIONS
 ============================================================ */
 function openAddProductModal() {
+  state.editingProductId = null;
+
+  const dict = TRANSLATIONS[state.language];
+  document.getElementById("addProductModalTitle").textContent = dict.addProductModalTitle;
+  document.getElementById("addProductModalDesc").textContent = dict.addProductModalDesc;
+  document.getElementById("btnAddProdSubmit").textContent = dict.btnAddProdSubmit;
+
   document.getElementById("addProductModal").classList.add("active");
   // reset file upload temp state
   state.uploadedImageBase64 = null;
@@ -1624,6 +1574,44 @@ function openAddProductModal() {
   
   document.getElementById("imageUploadStatus").textContent = "";
   document.getElementById("addProductForm").reset();
+}
+
+function openEditProductModal(productId) {
+  const p = state.products.find(prod => prod.id === productId);
+  if (!p) return;
+  
+  state.editingProductId = productId;
+  const dict = TRANSLATIONS[state.language];
+  
+  document.getElementById("addProductModalTitle").textContent = dict.addProductModalTitleEdit;
+  document.getElementById("addProductModalDesc").textContent = dict.addProductModalDescEdit;
+  document.getElementById("btnAddProdSubmit").textContent = dict.btnAddProdSubmitEdit;
+  
+  // Fill inputs
+  document.getElementById("newProdName").value = p.name;
+  document.getElementById("newProdCategory").value = p.category;
+  document.getElementById("newProdPrice").value = p.price;
+  document.getElementById("newProdStock").value = p.stock;
+  document.getElementById("newProdDesc").value = p.description;
+  
+  // Image state
+  const isBase64 = p.image.startsWith("data:");
+  if (isBase64) {
+    state.uploadedImageBase64 = p.image;
+    state.tempSelectedEmoji = null;
+    document.querySelectorAll(".img-select-option").forEach(el => el.classList.remove("active"));
+    document.getElementById("imageUploadStatus").textContent = state.language === "en" ? "Existing uploaded image preserved" : "ప్రస్తుత చిత్రం భద్రపరచబడింది";
+  } else {
+    state.tempSelectedEmoji = p.image;
+    state.uploadedImageBase64 = null;
+    document.querySelectorAll(".img-select-option").forEach(el => {
+      const match = el.getAttribute("data-img-emoji") === p.image;
+      el.classList.toggle("active", match);
+    });
+    document.getElementById("imageUploadStatus").textContent = "";
+  }
+  
+  document.getElementById("addProductModal").classList.add("active");
 }
 
 function closeAddProductModal(e) {
@@ -1668,30 +1656,44 @@ function handleAddProductSubmit(e) {
   const price = parseInt(document.getElementById("newProdPrice").value) || 0;
   const stock = parseInt(document.getElementById("newProdStock").value) || 0;
   const desc = document.getElementById("newProdDesc").value.trim();
-
-  // Create product object
-  const newId = state.products.length > 0 
-    ? Math.max(...state.products.map(p => p.id)) + 1 
-    : 1;
-
-  // Decide image string (either emoji or uploaded base64 data URL)
   const finalImage = state.uploadedImageBase64 ? state.uploadedImageBase64 : state.tempSelectedEmoji;
-
-  const newProduct = {
-    id: newId,
-    name: name,
-    category: category,
-    price: price,
-    stock: stock,
-    image: finalImage,
-    description: desc
-  };
-
-  state.products.push(newProduct);
-  saveProductsToStorage();
-
   const dict = TRANSLATIONS[state.language];
-  showToast(dict.toastProductCreated.replace("{name}", name));
+
+  if (state.editingProductId !== null) {
+    // Editing existing product
+    const p = state.products.find(prod => prod.id === state.editingProductId);
+    if (p) {
+      p.name = name;
+      p.category = category;
+      p.price = price;
+      p.stock = stock;
+      p.description = desc;
+      p.image = finalImage;
+      
+      saveProductsToStorage();
+      showToast(dict.toastProductUpdated.replace("{name}", name));
+    }
+    state.editingProductId = null;
+  } else {
+    // Create new product
+    const newId = state.products.length > 0 
+      ? Math.max(...state.products.map(p => p.id)) + 1 
+      : 1;
+
+    const newProduct = {
+      id: newId,
+      name: name,
+      category: category,
+      price: price,
+      stock: stock,
+      image: finalImage,
+      description: desc
+    };
+
+    state.products.push(newProduct);
+    saveProductsToStorage();
+    showToast(dict.toastProductCreated.replace("{name}", name));
+  }
 
   // Close and refresh
   document.getElementById("addProductModal").classList.remove("active");
